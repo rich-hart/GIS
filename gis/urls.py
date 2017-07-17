@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('', include('social_django.urls', namespace='social')),
 
-    url(r'^$', home),
-
+#    url(r'^$', home),
+    url(r'^home/',home),
 ]

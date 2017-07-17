@@ -25,7 +25,10 @@ SECRET_KEY = 'j8x@%5*zk&2d5!him*wz-!^v-8!be**bzw15!5&ns-z_(nfqi4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'thegreattribblehunt.org',
+'127.0.0.1',
+]
 
 
 # Application definition
@@ -67,8 +70,8 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
-SOCIAL_AUTH_FACEBOOK_KEY = '...'
-SOCIAL_AUTH_FACEBOOK_SECRET = '...'
+SOCIAL_AUTH_FACEBOOK_KEY = '339215276491889'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'cfda91fb6f3b30e6d565b0c5b7f77b81'
 
 
 ROOT_URLCONF = 'gis.urls'

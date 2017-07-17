@@ -67,7 +67,7 @@ class TestLiveLogin(LiveServerTestCase):
     def test_user_login(self):
         import ipdb; ipdb.set_trace()
         driver = self.driver
-        driver.get(self.live_server_url)
+        driver.get(urllib.parse.urljoin(self.live_server_url,'home'))
 
 class AccountTests(APITestCase):
     def test_profile(self):

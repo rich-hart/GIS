@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
 'thegreattribblehunt.org',
 '127.0.0.1',
+'thegreattribblehunt-dev.org',
 ]
 
 

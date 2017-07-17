@@ -18,18 +18,6 @@ import urllib
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import TestCase, RequestFactory
 
-#class LoginTest(TestCase):
-#    def setUp(self):
-#        self.factory = RequestFactory()
-#        self.admin_user = User.objects.create_superuser(
-#            'admin',
-#            'u@d.com',
-#            'password123',
-#        )
-#
-#        self.user = User.objects.create_user(
-#            username='jacob', email='jacob@…', password='top_secret')
-#    def test_admin(self):
       
 class TestLiveLogin(LiveServerTestCase):
     serialized_rollback = True
@@ -45,7 +33,7 @@ class TestLiveLogin(LiveServerTestCase):
             'password123',
         )
         admin_user.save()
-        if False:
+        if True:
             self.driver = webdriver.Chrome()
         else:
 
@@ -75,24 +63,17 @@ class TestLiveLogin(LiveServerTestCase):
             'Welcome',
             driver.page_source
         )        
-#        login_button = driver.find_element_by_tag_name('input')
-#        login_button.click()
-#        self.assertEqual(
-#            driver.current_url, 
-#            'http://localhost:8001/admin/login/?next=/admin/'
-#        )
-#        username_field = driver.find_element_by_name("auth_key")
-#        username_field.send_keys('admin')
-#        password_field = driver.find_element_by_name("password")
-#        password_field.send_keys('password123')
-#        sign_in_button = driver.find_element_by_class_name("standard")
-#        sign_in_button.click()
         
-
+    def test_user_login(self):
+        import ipdb; ipdb.set_trace()
+        driver = self.driver
+        driver.get(self.live_server_url)
 
 class AccountTests(APITestCase):
-    def test_create_admin_account(self):
+    def test_profile(self):
         pass
+#    def test_create_admin_account(self):
+#        pass
 
 
 #        """

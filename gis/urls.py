@@ -20,6 +20,7 @@ from .views import home
 urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
+    url('', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social_django.urls', namespace='social')),
 
 #    url(r'^$', home),

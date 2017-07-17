@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
 'thegreattribblehunt.org',
 '127.0.0.1',
+'thegreattribblehunt-dev.org',
 ]
 
 
@@ -69,6 +70,11 @@ AUTHENTICATION_BACKENDS = (
 
 
 )
+
+SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.9'
+
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 # Testing Keys
 SOCIAL_AUTH_FACEBOOK_KEY = '339215276491889'

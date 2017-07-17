@@ -27,13 +27,14 @@
         <h1>off-world empire</h1>
         <h2>Coming Soon</h2>
         <a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
-        <a href="{% url "social:begin" "facebook-oauth2" %}">Facebook</a>
+        <a href="{% url "social:begin" "facebook" %}">Facebook</a>
+<a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
 <fb:login-button 
   scope="public_profile,email"
   onlogin="checkLoginState();">
 </fb:login-button>
 
-    </div>
+</div>
 
 </body>
 </html>

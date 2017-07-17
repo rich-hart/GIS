@@ -45,9 +45,11 @@ INSTALLED_APPS = [
 
     # THIRD_PARTY
     'social_django',
-    
+    'rest_framework',    
+
     # PROJECT_APPS
     'accounts',
+    'tribbles',
 ]
 
 MIDDLEWARE = [

@@ -2,4 +2,4 @@ django
 djangorestframework
 selenium
 social-auth-app-django
-
+PyYAML

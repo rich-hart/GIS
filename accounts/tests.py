@@ -14,9 +14,28 @@ import os
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import urllib
 
-DRIVER = 'CHROME'
-class TestLogin(LiveServerTestCase):
+
+from django.contrib.auth.models import AnonymousUser, User
+from django.test import TestCase, RequestFactory
+
+#class LoginTest(TestCase):
+#    def setUp(self):
+#        self.factory = RequestFactory()
+#        self.admin_user = User.objects.create_superuser(
+#            'admin',
+#            'u@d.com',
+#            'password123',
+#        )
+#
+#        self.user = User.objects.create_user(
+#            username='jacob', email='jacob@…', password='top_secret')
+#    def test_admin(self):
+      
+class TestLiveLogin(LiveServerTestCase):
     serialized_rollback = True
+    def tearDown(self):
+        self.driver.quit()
+        super(LiveServerTestCase, self).tearDown()
 
     def setUp(self):
         super(LiveServerTestCase, self).setUp()
@@ -26,7 +45,7 @@ class TestLogin(LiveServerTestCase):
             'password123',
         )
         admin_user.save()
-        if DRIVER == 'CHROME':
+        if False:
             self.driver = webdriver.Chrome()
         else:
 
@@ -37,7 +56,7 @@ class TestLogin(LiveServerTestCase):
             self.driver = webdriver.PhantomJS(executable_path=phantomjs_path)
 
     def test_admin_login(self):
-        import ipdb; ipdb.set_trace()
+#        import ipdb; ipdb.set_trace()
         driver = self.driver
         driver.get(urllib.parse.urljoin(self.live_server_url,'admin'))
         self.assertIn('/admin/login/?next=/admin/',driver.current_url)
@@ -48,7 +67,14 @@ class TestLogin(LiveServerTestCase):
         login_button  = driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input'
 )       
         login_button.click()
-
+        self.assertEqual(
+            driver.current_url,
+            urllib.parse.urljoin(self.live_server_url,'admin/')
+        )
+        self.assertIn(
+            'Welcome',
+            driver.page_source
+        )        
 #        login_button = driver.find_element_by_tag_name('input')
 #        login_button.click()
 #        self.assertEqual(

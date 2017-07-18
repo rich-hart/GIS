@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from .views import home
+from .views import home, demo, facebook
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
@@ -70,4 +70,8 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+if settings.DEBUG:
+    urlpatterns = urlpatterns + [url(r'^demo/',demo)]
 
+if settings.DEBUG:
+    urlpatterns = urlpatterns + [url(r'^facebook/',facebook)]

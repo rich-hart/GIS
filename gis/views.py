@@ -12,3 +12,8 @@ def facebook(request):
     html = "<html><body>It is now %s.</body></html>" % now
     return render(request, 'facebook.html')
 
+def demo(request):
+    now = datetime.datetime.now()
+    html = "<html><body>It is now %s.</body></html>" % now
+    return render(request, 'demo.html')
+

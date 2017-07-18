@@ -1,0 +1,6 @@
+---
+- model: tribbles.Tribble
+  pk: 1
+  fields:
+    key: 7f57da66d6f1469b85d181f331f7c230
+

@@ -33,7 +33,7 @@ class TestLiveLogin(LiveServerTestCase):
             'password123',
         )
         admin_user.save()
-        if True:
+        if False:
             self.driver = webdriver.Chrome()
         else:
 
@@ -65,7 +65,6 @@ class TestLiveLogin(LiveServerTestCase):
         )        
         
     def test_user_login(self):
-        import ipdb; ipdb.set_trace()
         driver = self.driver
         driver.get(urllib.parse.urljoin(self.live_server_url,'home'))
 

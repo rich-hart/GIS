@@ -6,4 +6,4 @@ ghostdriver.log
 */local.py
 db.sqlite3
 staticfiles
-
+.DS_Store

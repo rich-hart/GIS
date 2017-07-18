@@ -25,7 +25,9 @@ from tribbles.models import Tribble
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
-from accounts.views import UserViewSet
+from accounts.views import UserViewSet, ProfileViewSet
+
+
 # Serializers define the API representation.
 class TribbleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -41,6 +43,7 @@ class TribbleSerializer(serializers.HyperlinkedModelSerializer):
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'tribbles', TribbleViewSet)
+router.register(r'profiles', ProfileViewSet)
 
 router.register(r'users', UserViewSet)
 

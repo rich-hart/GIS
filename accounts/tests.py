@@ -18,7 +18,29 @@ import urllib
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import TestCase, RequestFactory
 
-      
+
+class ProfileTests(APITestCase):
+    def setUp(self): 
+        self.url = reverse('profile-list')
+        self.user = User.objects.create_user(
+            username='test_user', email='u@d.com', password='password')
+
+    def test_anonymous_profile(self):
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.data,
+            {"detail":"Authentication credentials were not provided."}
+        )
+
+    def test_user_profile(self):
+        response = self.client.get(self.url, format='json')
+        self.client.login(username='test_user', password='password')
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.data,
+            []
+        )
+
 class TestLiveLogin(LiveServerTestCase):
     serialized_rollback = True
     def tearDown(self):

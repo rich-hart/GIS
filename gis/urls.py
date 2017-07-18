@@ -25,7 +25,7 @@ from tribbles.models import Tribble
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
-from accounts.views import UserViewSet, ProfileViewSet
+from accounts.views import UserViewSet, ProfileViewSet, AddressViewSet
 
 
 # Serializers define the API representation.
@@ -44,7 +44,7 @@ class TribbleSerializer(serializers.HyperlinkedModelSerializer):
 router = routers.DefaultRouter()
 router.register(r'tribbles', TribbleViewSet)
 router.register(r'profiles', ProfileViewSet)
-
+router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
 
 

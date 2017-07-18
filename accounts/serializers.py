@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
 from .models import Profile
+from address.models import Address
 # Serializers define the API representation.
 
 # Serializers define the API representation.
@@ -24,4 +25,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
         fields = ('owner', )
-
+class AddressSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Address
+        fields = ('raw', )

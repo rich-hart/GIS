@@ -25,7 +25,8 @@ from tribbles.models import Tribble
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
-from accounts.views import UserViewSet, ProfileViewSet
+from accounts.views import (UserViewSet, ProfileViewSet, AddressViewSet, 
+AccountViewSet)
 
 
 # Serializers define the API representation.
@@ -42,9 +43,12 @@ class TribbleSerializer(serializers.HyperlinkedModelSerializer):
 # ViewSets define the view behavior.
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'tribbles', TribbleViewSet)
-router.register(r'profiles', ProfileViewSet)
+router.register(r'accounts', AccountViewSet, base_name='account')
 
+router.register(r'tribbles', TribbleViewSet)
+
+router.register(r'profile', ProfileViewSet, base_name='profile')
+router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
 
 
@@ -52,8 +56,8 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/', include(router.urls)),
 
     url('', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social_django.urls', namespace='social')),

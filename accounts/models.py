@@ -3,9 +3,10 @@ from address.models import Address
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    User = models.OneToOneField(
+    owner = models.OneToOneField(
         User,
     )
     address = models.OneToOneField(
         Address,
+        null = True
     )

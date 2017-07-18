@@ -43,11 +43,11 @@ class TribbleSerializer(serializers.HyperlinkedModelSerializer):
 # ViewSets define the view behavior.
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'accounts', AccountViewSet)
+router.register(r'accounts', AccountViewSet, base_name='account')
 
 router.register(r'tribbles', TribbleViewSet)
 
-router.register(r'profile', ProfileViewSet,'profile-detail')
+router.register(r'profile', ProfileViewSet, base_name='profile')
 router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
 

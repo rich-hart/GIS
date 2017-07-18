@@ -8,4 +8,5 @@ class Profile(models.Model):
     )
     address = models.OneToOneField(
         Address,
+        null = True
     )

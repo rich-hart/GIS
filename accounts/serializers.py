@@ -20,18 +20,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('url', 'username', 'email', 'is_staff')
 
-# Serializers define the API representation.
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('owner', )
-
-class AccountSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('owner', )
-
-class AddressSerializer(serializers.HyperlinkedModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('raw', )
+        # read_only_fields
+
+# Serializers define the API representation.
+class ProfileSerializer(serializers.ModelSerializer):
+    address = serializers.CharField()
+    class Meta:
+        model = Profile
+        fields = ('owner', 'address',)
+        read_only_fields = ('owner',)
+
+class AccountSerializer(serializers.HyperlinkedModelSerializer):
+    address = serializers.CharField()
+    class Meta:
+        model = Profile
+        fields = ('owner', 'address',)
+         

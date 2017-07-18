@@ -24,7 +24,7 @@ class TribbleViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAuthenticated]
 
     @detail_route()
-    def adopt(self, request, key):
+    def hunt(self, request, key):
         tribble = self.get_object()
         if not tribble.owner:
             tribble.owner = request.user

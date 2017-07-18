@@ -17,7 +17,7 @@ class TribbleTests(APITestCase):
     def setUp(self): 
         self.key = '7f57da66d6f1469b85d181f331f7c230'
         self.default_url = reverse('tribble-list')
-        self.adopt_url = os.path.join(self.default_url,self.key,'adopt')
+        self.hunt_url = os.path.join(self.default_url,self.key,'hunt')
         self.user = User.objects.create_user(
             username='test_user', email='u@d.com', password='password')
         self.user_link = 'http://'+os.path.join('testserver','api','users',str(self.user.pk)) + '/' 
@@ -31,8 +31,8 @@ class TribbleTests(APITestCase):
             {"detail":"Authentication credentials were not provided."}
         )
 
-    def test_anonymous_adopt(self):
-        response = self.client.get(self.adopt_url, format='json',follow=True)
+    def test_anonymous_hunt(self):
+        response = self.client.get(self.hunt_url, format='json',follow=True)
         self.assertEqual(
             response.data,
             {"detail":"Authentication credentials were not provided."}
@@ -48,9 +48,9 @@ class TribbleTests(APITestCase):
             [{"owner":None}]
         )
 
-    def test_user_adopt(self):
+    def test_user_hunt(self):
         self.client.login(username='test_user', password='password')
-        response = self.client.get(self.adopt_url, format='json',follow=True)
+        response = self.client.get(self.hunt_url, format='json',follow=True)
         
         self.assertEqual(
             json.loads(response.content.decode(response.charset)),
@@ -61,7 +61,7 @@ class TribbleTests(APITestCase):
             username='test_user_2', email='u@d.com', password='password')
 
         self.client.login(username='test_user_2', password='password')
-        response = self.client.get(self.adopt_url, format='json',follow=True)
+        response = self.client.get(self.hunt_url, format='json',follow=True)
         
         self.assertEqual(
             json.loads(response.content.decode(response.charset)),
@@ -77,7 +77,7 @@ class TribbleTests(APITestCase):
             [{"owner":None}]
         )
 
-        self.test_user_adopt()
+        self.test_user_hunt()
         self.client.login(username='staff_user', password='password')
 
         response = self.client.get(self.default_url, format='json',follow=True)
@@ -86,9 +86,9 @@ class TribbleTests(APITestCase):
             [{"owner":self.user_link}]
         )
 
-    def test_staff_adopt(self):
+    def test_staff_hunt(self):
         self.test_staff_default()
-        response = self.client.get(self.adopt_url, format='json',follow=True)
+        response = self.client.get(self.hunt_url, format='json',follow=True)
         self.assertEqual(
             json.loads(response.content.decode(response.charset)),
             [{"owner":None}]

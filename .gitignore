@@ -5,3 +5,5 @@ ghostdriver.log
 *.swp
 */local.py
 db.sqlite3
+staticfiles
+

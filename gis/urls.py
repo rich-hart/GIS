@@ -27,7 +27,8 @@ from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
 from accounts.views import (UserViewSet, ProfileViewSet, AddressViewSet, 
 AccountViewSet)
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Serializers define the API representation.
 class TribbleSerializer(serializers.HyperlinkedModelSerializer):
@@ -65,3 +66,8 @@ urlpatterns = [
 #    url(r'^$', home),
     url(r'^home/',home),
 ]
+
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import UserSerializer, ProfileSerializer, AddressSerializer
-
+from .serializers import (UserSerializer, ProfileSerializer, AddressSerializer
+,AccountSerializer)
 from rest_framework import routers, serializers, viewsets
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
@@ -16,6 +16,12 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
 
+class AccountViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = AccountSerializer
+    permission_classes = [IsAdminUser]
+    basename = 'accounts'
+
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -24,9 +30,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
         
-    def get_queryset(self):
-        user = self.request.user
-        queryset = []
-        return queryset
+
 
 

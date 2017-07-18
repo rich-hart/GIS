@@ -25,6 +25,12 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
         fields = ('owner', )
+
+class AccountSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('owner', )
+
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Address

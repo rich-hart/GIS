@@ -3,14 +3,20 @@ import datetime
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import AnonymousUser
 def home(request):
-    import ipdb; ipdb.set_trace()
-    if request.user.is_anonymous:
+    user = request.user
+#    import ipdb; ipdb.set_trace()
+    if user.is_anonymous:
         data = {
             'username': None
         }
+    elif user.is_superuser:
+        data = {
+            'username': user.username
+        }
     else:
         data = {
-            'username': request.user.username
+            'username': user.username,
+            'address': user.profile.address.raw,
         }
 
     return render(request, 'home.html', data)

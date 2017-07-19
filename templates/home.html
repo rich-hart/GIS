@@ -58,7 +58,8 @@ body, html {
       <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
 
       {% endif %}
-     <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>-->
+      {% if address %} <p>{{username}}</p>
+      {% endif %}
     </div>
 
     <div class="w3-twothird">

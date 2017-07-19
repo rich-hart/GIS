@@ -1,4 +1,4 @@
-
+from rest_framework.validators import UniqueValidator
 from django.conf.urls import url, include
 from django.contrib import admin
 
@@ -27,12 +27,20 @@ class AddressSerializer(serializers.ModelSerializer):
         # read_only_fields
 
 # Serializers define the API representation.
+#FIXME: Profile Serializer does not validate properly
+# user queryset needs to be restricted. 
 class ProfileSerializer(serializers.ModelSerializer):
+#    owner = serializers.ReadOnlyField(source='user.email')
+#    owner = serializers.CurrentUserDefault()
+#    user = serializers.CurrentUserDefault()
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
     address = serializers.CharField()
     class Meta:
         model = Profile
-        fields = ('owner', 'address',)
-        read_only_fields = ('owner',)
+        fields = ('owner', 'address')
+        #read_only_fields = ('owner',)
 
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
     address = serializers.CharField()

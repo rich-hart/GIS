@@ -43,18 +43,26 @@ class AccountViewSet(viewsets.ModelViewSet):
     base_name = 'account'
     allowed_methods = ['GET']
 class ProfileViewSet(viewsets.ModelViewSet):
+#    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated,IsOwner]
-    allowed_methods = ['GET','POST']
+#    allowed_methods = ['GET','POST',]
 #    lookup_field = 'owner' 
     base_name = 'profile'
     def perform_create(self, serializer):
+
+#        if not Profile.objects.filter(owner=self.request.user):
+        address = Address(raw = self.request.data['address'])
+        address.save()
+        serializer.save(owner=self.request.user, address = address)
+
+    def perform_update(self, serializer):
 #        import ipdb; ipdb.set_trace()
-        if not Profile.objects.filter(owner=self.request.user):
-            address = Address(raw = self.request.data['address'])
-            address.save()
-            serializer.save(owner=self.request.user, address = address)
-        
+        address = Address(raw = self.request.data['address'])
+        address.save()
+        serializer.save(owner=self.request.user, address = address)
+
+    
     def get_queryset(self):
         user = self.request.user
         return Profile.objects.filter(owner=user)

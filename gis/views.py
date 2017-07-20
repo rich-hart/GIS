@@ -27,9 +27,26 @@ def facebook(request):
     return render(request, 'facebook.html')
 
 def demo(request):
-    return render(request, 'demo.html')
+    user = request.user
+#    import ipdb; ipdb.set_trace()
+    if user.is_anonymous:
+        data = {
+            'username': None
+        }
+    elif user.is_superuser:
+        data = {
+            'username': user.username
+        }
+    else:
+        data = {
+            'username': user.username,
+            'address': user.profile.address.raw,
+        }
+
+    return render(request, 'demo.html', data)
 
 def profile_form(request):
+#    import ipdb; ipdb.set_trace()
     profile = Profile.objects.get(owner=request.user)
     profile.address.raw = request.POST.get('address')
     profile.address.save()

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from .views import home, demo, facebook
+from .views import home, demo, facebook, profile_form
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
@@ -64,7 +64,9 @@ urlpatterns = [
     url('', include('social_django.urls', namespace='social')),
 
 #    url(r'^$', home),
-    url(r'^home/',home),
+    url(r'^home/',home,name='home'),
+    url(r'^profile_form/',profile_form),
+
 ]
 
 if settings.DEBUG:

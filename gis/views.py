@@ -2,6 +2,8 @@ from django.http import HttpResponse
 import datetime
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import AnonymousUser
+from django.shortcuts import redirect
+from accounts.models import Profile, Address
 def home(request):
     user = request.user
 #    import ipdb; ipdb.set_trace()
@@ -26,4 +28,10 @@ def facebook(request):
 
 def demo(request):
     return render(request, 'demo.html')
+
+def profile_form(request):
+    profile = Profile.objects.get(owner=request.user)
+    profile.address.raw = request.POST.get('address')
+    profile.address.save()
+    return redirect('home')
 

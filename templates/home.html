@@ -53,13 +53,22 @@ body, html {
   <div class="w3-row-padding w3-center" style="margin-top:64px">
     <div class="w3-quarter" style="margin-right:32px">
       {% if username %}
-      <p class="w3-large">{{username}}</p>
+        <p class="w3-large">{{username}}</p>
       {% else %}
-      <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
+        <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
 
       {% endif %}
-      {% if address %} <p>{{username}}</p>
+      {% if address %} 
+        <form action="/profile_form/" method="post">
+          {% csrf_token %}
+          <label for="address">Address: </label>
+          <input id="address" type="text" name="address" value="{{address}}">
+          <input type="submit" value="Update" />
+        </form>
       {% endif %}
+
+
+
     </div>
 
     <div class="w3-twothird">

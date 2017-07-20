@@ -61,8 +61,7 @@ body, html {
       {% if address %} 
         <form action="/profile_form/" method="post">
           {% csrf_token %}
-          <label for="address">Address: </label>
-          <input id="address" type="text" name="address" value="{{address}}">
+          <input id="address" type="text" name="address" value="{{address}}"/>
           <input type="submit" value="Update" />
         </form>
       {% endif %}

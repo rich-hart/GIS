@@ -47,7 +47,7 @@ class ProfileTests(APITestCase):
         self.client.login(username='test_user', password='password')
         data = {'address' : 'number street, city state zip'}
         response = self.client.post(self.url, data, format='json')
-        data.update({'owner': 1})
+        #data.update({'owner': 1})
         self.assertEqual(
             response.data,
             data

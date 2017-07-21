@@ -80,6 +80,8 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
+GOOGLE_MAPS_API_KEY = 'AIzaSyA5aEe7r30H-mXsJWnyrHxwuNUlSKMYaTI'
+
 SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.9'
 
 
@@ -216,4 +218,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+
+try:
+    from .local import *
+except ImportError:
+    pass
+
 

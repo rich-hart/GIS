@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
 'thegreattribblehunt-dev.org',
 'thegreattribblehunt-dev.herokuapp.com',
 'gaaaysinspaaace.herokuapp.com',
+'www.thegreattribblehunt.org',
 ]
 
 

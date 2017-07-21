@@ -58,17 +58,15 @@ body, html {
         <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
 
       {% endif %}
-      {% if address %} 
     <form action="/profile_form/" method="post">
     <input id="pac-input" class="controls" type="text"
         placeholder="Enter a location">
 
           {% csrf_token %}
-          <input id="address" type="hidden" name="address" value="{{address}}"/>
+          <input id="address" type="hidden" name="address" value="temp"/>
           <input type="submit" value="Update" />
         </form>
-        <p class="w3-small">{{address}}</p>
-      {% endif %}
+        <p class="w3-small">temp</p>
 
 
 

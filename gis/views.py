@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import redirect
 from accounts.models import Profile, Address
+from django.conf import settings
+
 def home(request):
     user = request.user
 #    import ipdb; ipdb.set_trace()
@@ -20,7 +22,7 @@ def home(request):
             'username': user.username,
             'address': user.profile.address.raw,
         }
-
+    data.update({'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY})
     return render(request, 'home.html', data)
 
 def facebook(request):

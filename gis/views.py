@@ -11,11 +11,13 @@ def home(request):
 #    import ipdb; ipdb.set_trace()
     if user.is_anonymous:
         data = {
-            'username': None
+            'username': None,
+            'address': '',
         }
     elif user.is_superuser:
         data = {
-            'username': user.username
+            'username': user.username,
+            'address': 'NA',
         }
     else:
         data = {

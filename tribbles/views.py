@@ -27,7 +27,10 @@ class TribbleViewSet(viewsets.ModelViewSet):
     def hunt(self, request, key):
         tribble = self.get_object()
         if tribble.owner:
-            data = {'detail': "Tribble was caught by another hunter."}
+            if tribble.owner==request.user:
+                data = {'detail': "Tribble already captured."}
+            else:
+                data = {'detail': "Tribble was caught by another hunter."}
         else:
             tribble.owner = request.user
             tribble.save()

@@ -20,7 +20,7 @@ class TribbleViewSet(viewsets.ModelViewSet):
     queryset = Tribble.objects.all()
     serializer_class = TribbleSerializer
     lookup_field = 'key'
-    lookup_value_regex = '[0-9a-f]{32}'
+#    lookup_value_regex = '[0-9a-f]{32}'
     permission_classes=[IsAuthenticated]
 
     @detail_route()

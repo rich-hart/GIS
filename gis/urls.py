@@ -63,7 +63,7 @@ urlpatterns = [
     url('', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social_django.urls', namespace='social')),
 
-    url(r'^$', home),
+    url(r'^$', home, name='home'),
 #    url(r'^home/',home,name='home'),
     url(r'^profile_form/',profile_form),
 

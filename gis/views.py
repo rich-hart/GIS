@@ -54,5 +54,5 @@ def profile_form(request):
     profile = Profile.objects.get(owner=request.user)
     profile.address.raw = request.POST.get('address')
     profile.address.save()
-    return redirect('home')
+    return redirect('/#profile')
 

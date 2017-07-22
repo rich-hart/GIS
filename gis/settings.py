@@ -140,6 +140,8 @@ SOCIAL_AUTH_PIPELINE = (
     'accounts.pipeline.save_profile',
 )
 
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#profile'
+
 ROOT_URLCONF = 'gis.urls'
 
 TEMPLATES = [

@@ -51,14 +51,14 @@ body, html {
 <div class="w3-container" style="padding:128px 16px" id="about">
 
   <div class="w3-row-padding w3-center" style="margin-top:64px">
-    <div class="w3-quarter" style="margin-right:32px">
+    <div class="w3-third" style="margin-right:128px">
       {% if username %}
         <p class="w3-large">{{username}}</p>
       {% else %}
         <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
 
       {% endif %}
-    <input id="pac-input" class="controls" type="text"
+    <input id="pac-input" class="controls" type="text" size="45"
         placeholder="Search address">
     <form action="/profile_form/" method="post">
 
@@ -73,7 +73,7 @@ body, html {
 
     </div>
 
-    <div class="w3-twothird">
+    <div class="w3-half">
 <!--
        <iframe src="//www.google.com/maps/embed/v1/place?q=McCallum%20Rd,%20US
       &zoom=0

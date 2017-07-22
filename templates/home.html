@@ -66,7 +66,8 @@ body, html {
         </form>
         <p class="w3-small">{{address}}</p>
 
-      <input id="tribble_code" type="text" name="tribble_code"/>
+      <input id="tribble_code" type="text" name="tribble_code" 
+        value="{{tribble}}"/>
 
       <button onclick="getTribble()">Validate</button>
       <p id="hunter_msg"></p>
@@ -203,6 +204,13 @@ body, html {
 
     <script src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&libraries=places&callback=initMap"
         async defer></script>
+
+    <script>
+      if (tribble_code.value!="None"){
+        getTribble();
+      }
+//      debugger;
+    </script>
 
 </body>
 </html>

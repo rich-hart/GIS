@@ -6,23 +6,31 @@ from django.shortcuts import redirect
 from accounts.models import Profile, Address
 from django.conf import settings
 
+def qr_code_validator(request,key):
+#    import ipdb; ipdb.set_trace()
+     
+    return redirect('/?tribble={}#profile'.format(key))
 def home(request):
+#    import ipdb; ipdb.set_trace()
     user = request.user
 #    import ipdb; ipdb.set_trace()
     if user.is_anonymous:
         data = {
             'username': None,
             'address': '',
+            'tribble': None,
         }
     elif user.is_superuser:
         data = {
             'username': user.username,
             'address': 'NA',
+            'tribble': None,
         }
     else:
         data = {
             'username': user.username,
             'address': user.profile.address.raw,
+            'tribble': request.GET.get('tribble'),
         }
     data.update({'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY})
     return render(request, 'home.html', data)
@@ -31,6 +39,7 @@ def facebook(request):
     return render(request, 'facebook.html')
 
 def demo(request):
+
     user = request.user
 #    import ipdb; ipdb.set_trace()
     if user.is_anonymous:

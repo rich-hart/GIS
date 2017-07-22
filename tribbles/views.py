@@ -26,14 +26,26 @@ class TribbleViewSet(viewsets.ModelViewSet):
     @detail_route()
     def hunt(self, request, key):
         tribble = self.get_object()
-        if not tribble.owner:
+        if tribble.owner:
+            data = {'detail': "Tribble was caught by another hunter."}
+        else:
             tribble.owner = request.user
+            tribble.save()
+            data = {'detail': "Tribble caught!!"}
+        serializer = TribbleSerializer(tribble, many=False, context={'request': request})
+        return Response(data)
+      
+    @detail_route()
+    def release(self, request, key):
+        tribble = self.get_object()
         if request.user.is_staff:
             tribble.owner = None
-        tribble.save()
-
-
-        serializer = TribbleSerializer(tribble, many=False, context={'request': request})
-        return Response([serializer.data])
-      
-
+            data = {
+                'detail': "Tribble released."
+            }
+            tribble.save()
+        else:
+            data = {
+                "detail": "You do not have permission to perform this action."
+            }
+        return Response(data)

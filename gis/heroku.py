@@ -1,6 +1,7 @@
 from .settings import *
 import os
 import dj_database_url
+DEBUG = False
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ['SOCIAL_AUTH_FACEBOOK_SECRET']

@@ -50,7 +50,11 @@ body, html {
 
           {% csrf_token %}
           <input id="address" type="hidden" name="address" value="{{address}}"/>
-          <input class="w3-button w3-gray" type="submit" value="Update" />
+          <input id="google_id" type="hidden" name="google_id" value="{{google_id}}"/>
+          <input id="longitude" type="hidden" name="longitude" value="{{longitude}}"/>
+          <input id="latitude" type="hidden" name="latitude" value="{{latitude}}"/>
+
+         <input class="w3-button w3-gray" type="submit" value="Update" />
         </form>
         <p class="w3-small">{{address}}</p>
 
@@ -112,6 +116,31 @@ body, html {
     </script>
 
     <script>
+      function loadMap(map) {
+        var googles_id_url = window.location.protocol+'//'+window.location.hostname+'/api/google_ids?format=json';
+
+        axios.get(googles_id_url).then(function(response){
+//          document.getElementById("hunter_msg").innerHTML = response.data.detail;
+          console.log(response.data); 
+          for (var i = 0; i < response.data.length; i++) {
+            var marker = new google.maps.Marker({
+              map: map,
+              placeId: response.data[i].google_id,
+              location:  {lat: response.data[i].latitude, lng: longitude}
+            });
+            marker.setVisible(true);           
+    //Do something
+          }
+
+
+//          console.log(response.status); 
+        });
+      }
+
+    </script>
+
+
+    <script>
 
 
       function initMap() {
@@ -129,6 +158,7 @@ body, html {
 
         var infowindow = new google.maps.InfoWindow();
         var geocoder = new google.maps.Geocoder;
+
         var marker = new google.maps.Marker({
           map: map
         });
@@ -144,7 +174,6 @@ body, html {
             return;
           }
           geocoder.geocode({'placeId': place.place_id}, function(results, status) {
-
             if (status !== 'OK') {
               window.alert('Geocoder failed due to: ' + status);
               return;
@@ -158,6 +187,11 @@ body, html {
             });
             marker.setVisible(true);
             address.value = place.name;
+            google_id.value = place.place_id;
+
+            longitude.value = results[0].geometry.location.lng();
+            latitude.value = results[0].geometry.location.lat();
+            loadMap(map);
 
           });
         });

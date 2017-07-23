@@ -66,8 +66,7 @@ body, html {
         </form>
         <p class="w3-small">{{address}}</p>
 
-      <input id="tribble_code" type="text" name="tribble_code" 
-        value="{{tribble}}"/>
+      <input id="tribble_code" type="text" name="tribble_code"/>
 
       <button onclick="getTribble()">Validate</button>
       <p id="hunter_msg"></p>
@@ -206,7 +205,9 @@ body, html {
         async defer></script>
 
     <script>
-      if (tribble_code.value!="None"){
+      var tribble_parameter = "{{tribble}}";
+      if (tribble_parameter!="None"){
+        tribble_code.value = tribble_parameter;
         getTribble();
       }
 //      debugger;

@@ -5,7 +5,7 @@ from rest_framework import routers, serializers, viewsets
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
 from .models import Profile
-from address.models import Address
+from .models import Address
 
 from rest_framework import permissions
 

@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
 from .models import Profile
-from address.models import Address
+from .models import Address
 # Serializers define the API representation.
 
 # Serializers define the API representation.

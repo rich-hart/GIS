@@ -1,29 +1,45 @@
-<!DOCTYPE html>
 <html>
-  <body>
-    <script src="https://unpkg.com/axios/dist/axios.min.js">
-    </script>
+<head>
+  
+  <title>Google Maps Multiple Markers</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWRD-3tJWLEURooZVq6xqVjdKddJqECNw&libraries=places" type="text/javascript"></script>
+</head>
+<body>
+  <div id="map" style="height: 400px; width: 500px;">
+</div>
+<script type="text/javascript">
+    var locations = [
+      ['Bondi Beach', -33.890542, 151.274856, 4],
+      ['Coogee Beach', -33.923036, 151.259052, 5],
+      ['Cronulla Beach', -34.028249, 151.157507, 3],
+      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+      ['Maroubra Beach', -33.950198, 151.259302, 1]
+    ];
 
-    <div>
-      <button onclick="getAPI()">Get API</button>
-      <p id="p1">Hello World!</p>
-    </div>
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(-33.92, 151.25),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
 
-    <script>
-      function getAPI() {
-        var api_url = window.location.protocol+'//'+window.location.hostname+'/api/?format=json';
+    var infowindow = new google.maps.InfoWindow();
 
-        axios.get(api_url).then(function(response){
-//       debugger;
-          document.getElementById("p1").innerHTML = JSON.stringify(response.data);
-          console.log(response.data); // ex.: { user: 'Your User'}
-          console.log(response.status); // ex.: 200
-        });
-      }
+    var marker, i;
 
-    </script>
+    for (i = 0; i < locations.length; i++) { 
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
 
-
-
-  </body>
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+</body>
 </html>
+

@@ -24,6 +24,12 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('raw', )
+
+class GoogleIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ('google_id', 'longitude', 'latitude')
+
         # read_only_fields
 
 # Serializers define the API representation.

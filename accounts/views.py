@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .serializers import (UserSerializer, ProfileSerializer, AddressSerializer
-,AccountSerializer)
+,AccountSerializer, GoogleIDSerializer)
 from rest_framework import routers, serializers, viewsets
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
@@ -29,6 +29,12 @@ class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     permission_classes = [IsAdminUser]
+
+class GoogleIDViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all().order_by('-id')[:10]
+    serializer_class = GoogleIDSerializer
+
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

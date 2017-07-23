@@ -1,15 +1,3 @@
-<!--<!DOCTYPE html>
-<html>
-<body>
-
-    <div class="center">
-<a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
-
-</div>
-
-</body>
-</html>
--->
 <!DOCTYPE html>
 <html>
 <title>The Great Tribble Hunt</title>
@@ -87,11 +75,6 @@ body, html {
     </div>
 
     <div class="w3-half">
-<!--
-       <iframe src="//www.google.com/maps/embed/v1/place?q=McCallum%20Rd,%20US
-      &zoom=0
-      &key=AIzaSyDAApKDJ4m78RbA9JF-CNQEmDVP3cLGjVM" style="width:100%;height:300px">
-       </iframe>-->
     <div id="map" style="width:100%;height:300px"></div>
 
     </div>
@@ -112,16 +95,13 @@ body, html {
     </script>
     <script>
       function getTribble() {
-//        debugger;
         var api_url = window.location.protocol+'//'+window.location.hostname+'/api/tribbles/'+tribble_code.value+'/hunt/'+'?format=json';
 
         axios.get(api_url).then(function(response){
-//       debugger;
           document.getElementById("hunter_msg").innerHTML = response.data.detail;
-          console.log(response.data); // ex.: { user: 'Your User'}
-          console.log(response.status); // ex.: 200
+          console.log(response.data); 
+          console.log(response.status); 
         }).catch(function (error) {
-//          debugger;
            if (error.response.status==404){
              document.getElementById("hunter_msg").innerHTML = "Tribble not found";
            };
@@ -132,20 +112,12 @@ body, html {
     </script>
 
     <script>
-      // This sample uses the Place Autocomplete widget requesting only a place
-      // ID to allow the user to search for and locate a place. The sample
-      // then reverse geocodes the place ID and displays an info window
-      // containing the place ID and other information about the place that the
-      // user has selected.
 
-      // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13
+          center: {lat: 0.0, lng: 0.0},
+          zoom: 1
         });
 
         var input = document.getElementById('pac-input');
@@ -154,17 +126,13 @@ body, html {
             input, {placeIdOnly: true});
         autocomplete.bindTo('bounds', map);
 
-//        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
         var infowindow = new google.maps.InfoWindow();
-//        var infowindowContent = document.getElementById('infowindow-content');
-//        infowindow.setContent(infowindowContent);
         var geocoder = new google.maps.Geocoder;
         var marker = new google.maps.Marker({
           map: map
         });
         marker.addListener('click', function() {
-//          infowindow.open(map, marker);
           marker.setMap(map);
         });
 
@@ -189,13 +157,8 @@ body, html {
               location: results[0].geometry.location
             });
             marker.setVisible(true);
-//            infowindowContent.children['place-name'].textContent = place.name;
-//            infowindowContent.children['place-id'].textContent = place.place_id;
-//            infowindowContent.children['place-address'].textContent =
-//                results[0].formatted_address;
             address.value = place.name;
 
-//            infowindow.open(map, marker);
           });
         });
       }
@@ -210,7 +173,6 @@ body, html {
         tribble_code.value = tribble_parameter;
         getTribble();
       }
-//      debugger;
     </script>
 
 </body>

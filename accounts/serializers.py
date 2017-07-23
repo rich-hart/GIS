@@ -30,7 +30,7 @@ class GoogleIDSerializer(serializers.ModelSerializer):
         model = Address
         fields = ('google_id', 'longitude', 'latitude')
 
-        # read_only_fields
+        read_only_fields = fields
 
 # Serializers define the API representation.
 #FIXME: Profile Serializer does not validate properly

@@ -91,7 +91,12 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_FACEBOOK_KEY = '339215276491889'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'cfda91fb6f3b30e6d565b0c5b7f77b81'
 
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['public_profile']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['public_profile','email']
+
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email', 
+}
+
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple

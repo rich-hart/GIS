@@ -115,29 +115,6 @@ body, html {
 
     </script>
 
-    <script>
-      function loadMap(map) {
-        var googles_id_url = window.location.protocol+'//'+window.location.hostname+'/api/google_ids?format=json';
-
-        axios.get(googles_id_url).then(function(response){
-//          document.getElementById("hunter_msg").innerHTML = response.data.detail;
-          console.log(response.data); 
-          for (var i = 0; i < response.data.length; i++) {
-            var marker = new google.maps.Marker({
-              map: map,
-              placeId: response.data[i].google_id,
-              location:  {lat: response.data[i].latitude, lng: longitude}
-            });
-            marker.setVisible(true);           
-    //Do something
-          }
-
-
-//          console.log(response.status); 
-        });
-      }
-
-    </script>
 
 
     <script>
@@ -191,22 +168,44 @@ body, html {
 
             longitude.value = results[0].geometry.location.lng();
             latitude.value = results[0].geometry.location.lat();
-            loadMap(map);
+      //      loadMap(map);
 
           });
         });
-      }
+debugger;
+function addMarker(location) {
+  marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+};
+
+  CentralPark = new google.maps.LatLng(40.779502, -73.967857);
+  addMarker(CentralPark);
+  CentralPark = new google.maps.LatLng(4.779502, -3.967857);
+  addMarker(CentralPark);
+
+
+      };
+
+//google.maps.event.addDomListener(window, 'load', initMap);
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&libraries=places&callback=initMap"
-        async defer></script>
+        async defer>
+
+</script>
 
     <script>
+
       var tribble_parameter = "{{tribble}}";
       if (tribble_parameter!="None"){
         tribble_code.value = tribble_parameter;
         getTribble();
       }
+    </script>
+
+    <script>
     </script>
 
 </body>

@@ -34,6 +34,7 @@ def home(request):
         data['google_id'] = user.profile.address.google_id
         data['longitude'] = user.profile.address.longitude
         data['latitude'] = user.profile.address.latitude
+        data['tribble']= request.GET.get('tribble')
     return render(request, 'home.html', data)
 
 def facebook(request):

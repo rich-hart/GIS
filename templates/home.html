@@ -69,49 +69,28 @@ body, html {
 
 <!-- About Section -->
 <div class="w3-container" style="padding:128px 16px" id="profile">
-
   <div class="w3-row-padding w3-center" style="margin-top:64px">
     <div class="w3-third" style="margin-right:128px">
       {% if username %}
-        <p class="w3-large">{{username}}</p>
+      <p class="w3-large">{{username}}</p>
+      <input id="pac-input" class="controls" type="text" size="45" placeholder="Search address">
+      <form action="/profile_form/" method="post">
+        {% csrf_token %}
+        <input id="address" type="hidden" name="address" value="{{address}}"/>
+        <input id="google_id" type="hidden" name="google_id" value="{{google_id}}"/>
+        <input id="longitude" type="hidden" name="longitude" value="{{longitude}}"/>
+        <input id="latitude" type="hidden" name="latitude" value="{{latitude}}"/>
 
-    <input id="pac-input" class="controls" type="text" size="45"
-        placeholder="Search address">
-    <form action="/profile_form/" method="post">
-
-
-          {% csrf_token %}
-          <input id="address" type="hidden" name="address" value="{{address}}"/>
-          <input id="google_id" type="hidden" name="google_id" value="{{google_id}}"/>
-          <input id="longitude" type="hidden" name="longitude" value="{{longitude}}"/>
-          <input id="latitude" type="hidden" name="latitude" value="{{latitude}}"/>
-
-         <input class="w3-button w3-gray" type="submit" value="Update" />
-        </form>
+        <input class="w3-button w3-gray" type="submit" value="Update" />
+      </form>
         <p class="w3-small">{{address}}</p>
-
-      <input id="tribble_code" type="text" name="tribble_code"/>
-
-      <button onclick="getTribble()">Validate</button>
-      <p id="hunter_msg"></p>
-
-
-          <a href="/api-auth/logout/?next={{ request.path }}#profile"
-            class="w3-button w3-gray">Logout</a>
-
-      {% else %}
-        <a href="{% url 'social:begin' 'facebook' %}"
-            class="w3-button w3-gray">Log In</a>
-
+        <input id="tribble_code" type="text" name="tribble_code"/>
+        <button onclick="getTribble()">Validate</button>
+        <p id="hunter_msg"></p>
       {% endif %}
-
-
-
-
     </div>
-
     <div class="w3-half">
-      <div id="map" style="width:100%;height:300px"></div>
+      <div id="map" style="width:600px;height:300px"></div>
     </div>
   </div>
 </div>

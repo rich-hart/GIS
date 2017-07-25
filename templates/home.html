@@ -25,6 +25,38 @@ body, html {
 </style>
 <body>
 
+<!-- Links (sit on top) -->
+<div class="w3-top">
+  <div class="w3-row w3-padding w3-black">
+    {% if username %}
+    <div class="w3-col s3">
+      <a href="#profile" class="w3-button w3-block w3-black">{{username}}</a>
+    </div>
+    <div class="w3-col s3">
+      <a href="/api-auth/logout/?next={{ request.path }}#profile" class="w3-button w3-block w3-black">LOGOUT</a>
+    </div>
+    {% else %}
+    <div class="w3-col s3">
+      <a href="{% url 'social:begin' 'facebook' %}" class="w3-button w3-block w3-black">LOGIN</a>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+<!--
+<div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+{% if username %}
+  <a href="#" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>{{username}}</b></a>
+  <a href="/api-auth/logout/?next={{ request.path }}#profile"
+            class="w3-button w3-gray">Logout</a>
+
+      {% else %}
+        <a href="{% url 'social:begin' 'facebook' %}"
+            class="w3-button w3-gray">Log In</a>
+
+{% endif %}
+</div>
+-->
 
 <!-- Header with full-height image -->
 <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
@@ -79,8 +111,7 @@ body, html {
     </div>
 
     <div class="w3-half">
-    <div id="map" style="width:100%;height:300px"></div>
-
+      <div id="map" style="width:100%;height:300px"></div>
     </div>
   </div>
 </div>

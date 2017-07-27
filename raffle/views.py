@@ -7,16 +7,23 @@ from .serializer import (
 from rest_framework import viewsets
 from .models import Purchaser, Ticket, Purchase 
 
+class PurchaserViewSet(viewsets.ModelViewSet):
+    queryset = Purchaser.objects.all()
+    serializer_class = PurchaserSerializer 
+
+
 class PurchaseViewSet(viewsets.ModelViewSet):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer 
 
     def perform_create(self, serializer):
+#        import ipdb; ipdb.set_trace()
+#        serializer.save()
         data = serializer.data
         purchaser = Purchaser(
-            email=data['purchaser']['email'],
-            first_name = data['purchaser']['first_name'],
-            last_name = data['purchaser']['last_name'],
+            email=data['email'],
+            first_name = data['first_name'],
+            last_name = data['last_name'],
         )
         purchaser.save()
         purchase = Purchase(

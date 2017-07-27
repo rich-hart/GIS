@@ -35,6 +35,7 @@ from accounts.views import (
 from raffle.views import (
    PurchaseViewSet, 
    TicketViewSet,
+   PurchaserViewSet,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -62,6 +63,8 @@ router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'google_ids', GoogleIDViewSet)
 router.register(r'purchase', PurchaseViewSet)
+router.register(r'purchaser', PurchaserViewSet)
+
 router.register(r'ticket', TicketViewSet)
 
 

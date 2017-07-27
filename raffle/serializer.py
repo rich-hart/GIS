@@ -35,18 +35,18 @@ class PurchaseSerializer(serializers.HyperlinkedModelSerializer):
         purchaser.save()
         purchase = Purchase(item=validated_data['item'],buyer=purchaser)
         purchase.save()
-        if validated_data['item']=='1X':
-            units = 1
-        elif validated_data['item']=='5X':
-            units = 5
-        elif validated_data['item']=='10X':
-            units = 10
-        else:
-            #RAISE ERROR
-            units = 0
-        for i in range(0, units):
-            ticket = Ticket(owner = purchaser)
-            ticket.save()
+#        if validated_data['item']=='1X':
+#            units = 1
+#        elif validated_data['item']=='5X':
+#            units = 5
+#        elif validated_data['item']=='10X':
+#            units = 10
+#        else:
+#            #RAISE ERROR
+#            units = 0
+#        for i in range(0, units):
+#            ticket = Ticket(owner = purchaser)
+#            ticket.save()
         return purchase
 #        tracks_data = validated_data.pop('tracks')
 #        album = Album.objects.create(**validated_data)

@@ -7,6 +7,14 @@ from .serializer import (
 from rest_framework import viewsets
 from .models import Purchaser, Ticket, Purchase 
 
+from rest_framework import permissions
+from rest_framework.permissions import IsAdminUser,IsAuthenticated
+
+class IsStaff(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+#        import ipdb; ipdb.set_trace()
+        return request.user.is_staff
+
 class PurchaserViewSet(viewsets.ModelViewSet):
     queryset = Purchaser.objects.all()
     serializer_class = PurchaserSerializer 
@@ -15,6 +23,8 @@ class PurchaserViewSet(viewsets.ModelViewSet):
 class PurchaseViewSet(viewsets.ModelViewSet):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer 
+    permission_classes = [IsStaff,IsAuthenticated]
+
 
 #    def perform_create(self, serializer):
 #        import ipdb; ipdb.set_trace()

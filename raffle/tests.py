@@ -47,11 +47,11 @@ class RaffleTests(APITestCase):
         url = reverse('purchase-list')
         data = {
             'item': '10X',
-                "purchaser": {
-                    "email": "u@d.com",
-                    "first_name": "first",
-                    "last_name": "last",
-                }
+            "purchaser": {
+                "email": "u@d.com",
+                "first_name": "first",
+                "last_name": "last",
+            }
         }
         old_ticket_total = Ticket.objects.count()
         response = self.client.post(url, data, format='json')

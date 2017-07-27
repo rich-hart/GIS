@@ -32,5 +32,3 @@ class Purchase(models.Model):
         default=SINGLE,
     )
     buyer = models.ForeignKey(Purchaser, on_delete=models.CASCADE)
-
-

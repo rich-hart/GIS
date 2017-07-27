@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     # PROJECT_APPS
     'accounts',
     'tribbles',
-
+    'raffle',
 ]
 
 MIDDLEWARE = [

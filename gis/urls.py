@@ -25,8 +25,17 @@ from tribbles.models import Tribble
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
-from accounts.views import (UserViewSet, ProfileViewSet, AddressViewSet, 
-AccountViewSet, GoogleIDViewSet)
+from accounts.views import (
+    UserViewSet, 
+    ProfileViewSet, 
+    AddressViewSet, 
+    AccountViewSet, 
+    GoogleIDViewSet
+)
+from raffle.views import (
+   PurchaseViewSet, 
+   TicketViewSet,
+)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -52,6 +61,8 @@ router.register(r'profile', ProfileViewSet, base_name='profile')
 router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'google_ids', GoogleIDViewSet)
+router.register(r'purchase', PurchaseViewSet)
+router.register(r'ticket', TicketViewSet)
 
 
 urlpatterns = [

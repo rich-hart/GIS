@@ -32,3 +32,4 @@ class Purchase(models.Model):
         default=SINGLE,
     )
     buyer = models.ForeignKey(Purchaser, on_delete=models.CASCADE)
+    time_stamp = models.DateTimeField(auto_now_add=True)

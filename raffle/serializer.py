@@ -23,9 +23,10 @@ class PurchaseSerializer(serializers.HyperlinkedModelSerializer):
 #            'first_name',
 #            'last_name',
             'buyer',
+            'time_stamp',
 #            'purchaser',
         )
-        read_only_fields = ('buyer',)
+        read_only_fields = ('buyer','time_stamp')
 #        write_only_fields = ('first_name','last_name','buyer','email','item')
 #        depth = 1      
     def create(self, validated_data):

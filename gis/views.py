@@ -6,6 +6,10 @@ from django.shortcuts import redirect
 from accounts.models import Profile, Address
 from django.conf import settings
 
+
+def raffle(request):
+    return render(request, 'raffle.html')
+
 def qr_code_validator(request,key):
 #    import ipdb; ipdb.set_trace()
      

@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from .views import home, demo, facebook, profile_form,qr_code_validator
+from .views import (
+    home, 
+    demo, 
+    facebook, 
+    profile_form,
+    qr_code_validator,
+    raffle,
+)
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
@@ -81,7 +88,7 @@ urlpatterns = [
 #    url(r'^home/',home,name='home'),
     url(r'^profile_form/',profile_form),
     url(r'^qr_code_validator/(?P<key>.+)/$',qr_code_validator),
-
+    url(r'^raffle/',raffle),
 ]
 
 if settings.DEBUG:

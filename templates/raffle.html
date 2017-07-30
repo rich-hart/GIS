@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+
+<div class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
+<div class="w3-row w3-section w3-center">
+
+<select class="form-control" name="item" id="purchase_item">
+    <option value="1X">1 Ticket for $10</option>
+    <option value="5X">5 Tickets for $40</option>
+    <option value="10X">10 Tickets for $70</option>
+</select>
+</div>
+<p class="w3-center">
+<button class="w3-button w3-section w3-blue w3-ripple" id="cancel" onclick="Cancel()"> Cancel </button>
+
+<button class="w3-button w3-section w3-blue w3-ripple" id="purchase" onclick="Purchase()"> Purchase </button>
+</p>
+
+</div>
+
+
+
+<div class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin" id="contact">
+<h2 class="w3-center">Contact Info</h2>
+ 
+
+
+<div class="w3-row w3-section">
+  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+    <div class="w3-rest">
+      <input class="w3-input w3-border" name="first" type="text" placeholder="First Name">
+    </div>
+</div>
+
+<div class="w3-row w3-section">
+  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+    <div class="w3-rest">
+      <input class="w3-input w3-border" name="last" type="text" placeholder="Last Name">
+    </div>
+</div>
+
+<div class="w3-row w3-section">
+  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
+    <div class="w3-rest">
+      <input class="w3-input w3-border" name="email" type="text" placeholder="Email">
+    </div>
+</div>
+
+<div class="w3-row w3-section">
+  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
+    <div class="w3-rest">
+      <input class="w3-input w3-border" name="confirm_email" type="text" placeholder="Confirm Email">
+    </div>
+</div>
+<!--
+<div class="w3-row w3-section">
+  <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-phone"></i></div>
+    <div class="w3-rest">
+      <input class="w3-input w3-border" name="phone" type="text" placeholder="Phone">
+    </div>
+</div>
+-->
+<p id="send_msg"></p>
+
+<p class="w3-center">
+
+<button class="w3-button w3-section w3-blue w3-ripple" onclick="Send()"> Send </button>
+</p>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"> </script>
+
+<script>
+    var cancel = document.getElementById('cancel');
+    cancel.style.display = 'none';
+    var contact = document.getElementById('contact');
+    contact.style.display = 'none';
+
+</script>
+<script>
+function Purchase() {
+    var contact = document.getElementById('contact');
+    contact.style.display = 'block';
+    var purchase = document.getElementById('purchase');
+    purchase.style.display ='none';
+    var cancel = document.getElementById('cancel');
+    cancel.style.display ='block';
+    var purchase_item = document.getElementById('purchase_item');
+    purchase_item.disabled = true;
+};
+
+
+function Cancel() {
+    var contact = document.getElementById('contact');
+    contact.style.display = 'none';
+    var purchase = document.getElementById('purchase');
+    purchase.style.display ='block';
+    var cancel = document.getElementById('cancel');
+    cancel.style.display ='none';
+    var purchase_item = document.getElementById('purchase_item');
+    purchase_item.disabled = false;
+    
+};
+
+function Send() {
+    var purchase_url = window.location.protocol+'//'+window.location.hostname+'/api/purchase/?format=json';
+
+        axios.get(purchase_url).then(function(response){
+          debugger;
+//          document.getElementById("send_msg").innerHTML = response.data.detail;
+//          console.log(response.data); 
+//          console.log(response.status); 
+        }).catch(function (error) {
+//           if (error.response.status==404){
+//             document.getElementById("send_msg").innerHTML = error;
+//           };
+//           console.log(error);
+        });
+
+};
+</script>
+</body>
+</html> 
+
+

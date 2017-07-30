@@ -16,6 +16,9 @@ class Purchaser(models.Model):
 class Ticket(models.Model):
     owner = models.ForeignKey(Purchaser, on_delete=models.CASCADE)
 
+class Draw(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    time_stamp = models.DateTimeField(auto_now_add=True)
 
 class Purchase(models.Model):
     SINGLE = '1X'

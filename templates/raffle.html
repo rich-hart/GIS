@@ -34,6 +34,8 @@
   <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
     <div class="w3-rest">
       <input id="first" class="w3-input w3-border" name="first" type="text" placeholder="First Name">
+<p id="first_msg"></p>
+
     </div>
 </div>
 
@@ -41,6 +43,8 @@
   <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
     <div class="w3-rest">
       <input id="last" class="w3-input w3-border" name="last" type="text" placeholder="Last Name">
+<p id="last_msg"></p>
+
     </div>
 </div>
 
@@ -48,6 +52,7 @@
   <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
     <div class="w3-rest">
       <input id="email" class="w3-input w3-border" name="email" type="text" placeholder="Email">
+<p id="email_msg"></p>
     </div>
 </div>
 
@@ -55,6 +60,7 @@
   <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
     <div class="w3-rest">
       <input id="confirm_email" class="w3-input w3-border" name="confirm_email" type="text" placeholder="Confirm Email">
+<p id="confirm_email_msg"></p>
     </div>
 </div>
 <!--
@@ -69,9 +75,13 @@
 
 <p class="w3-center">
 
-<button class="w3-button w3-section w3-blue w3-ripple" onclick="Send()"> Send </button>
+<button id="send" class="w3-button w3-section w3-blue w3-ripple" onclick="Send()"> Send </button>
 </p>
 </div>
+
+<form id="csrf_token_form" action="/your-name/" method="post">
+    {% csrf_token %}
+</form>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"> </script>
 
@@ -108,28 +118,63 @@ function Cancel() {
 };
 
 function Send() {
+          document.getElementById("first_msg").innerHTML = "";
+          document.getElementById("last_msg").innerHTML = "";
+          document.getElementById("email_msg").innerHTML = "";
+          document.getElementById("confirm_email_msg").innerHTML = "";
+
+          document.getElementById("send_msg").innerHTML = "";
+
     var purchase_url = window.location.protocol+'//'+window.location.hostname+'/api/purchase/?format=json';
-    debugger;
-    var first_elm = document.getElementById("first")
-    var last_elm = document.getElementById("last")
-    var email_elm = document.getElementById("email")
-    var confirm_email_elm = document.getElementById("confirm_email")
+    //debugger;
+    var first_elm = document.getElementById("first");
+    var last_elm = document.getElementById("last");
+    var email_elm = document.getElementById("email");
+    var confirm_email_elm = document.getElementById("confirm_email");
+    var purchase_item_elm = document.getElementById("purchase_item");
+    var csrf_token_elm = document.getElementsByName('csrfmiddlewaretoken');
+    var config = {
+      headers: {"X-CSRFToken": csrf_token_elm[0].value}
+    };
+    var data = {
+              "item": purchase_item_elm.value,
+              "buyer": {
+                "email": email_elm.value,
+                "first_name": first_elm.value,
+                "last_name": last_elm.value
+              }
+            } 
     if(email_elm.value == confirm_email_elm.value){
-        axios.get(purchase_url).then(function(response){
-//          debugger;
-             document.getElementById("send_msg").innerHTML = "";
+        axios.post(purchase_url, data, config).then(function(response){
+          //debugger;
+             document.getElementById("send_msg").innerHTML = "Contact Info Sent";
 //          document.getElementById("send_msg").innerHTML = response.data.detail;
 //          console.log(response.data); 
-//          console.log(response.status); 
+//          console.log(response.status);
+          var cancel = document.getElementById('cancel');
+          cancel.style.display ='none'; 
+          var send = document.getElementById('send');
+          send.style.display ='none';
         }).catch(function (error) {
 //          debugger;
            if (error.response.status==403){
              document.getElementById("send_msg").innerHTML = error.response.data.detail;
+           }else if(error.response.status==400){
+            // debugger;
+             if(error.response.data.buyer.first_name){
+               document.getElementById("first_msg").innerHTML = error.response.data.buyer.first_name[0];
+             }
+             if(error.response.data.buyer.last_name){
+               document.getElementById("last_msg").innerHTML = error.response.data.buyer.last_name[0];
+             }
+             if(error.response.data.buyer.email){
+               document.getElementById("email_msg").innerHTML = error.response.data.buyer.email[0];
+             }
            };
            console.log(error);
         });
-    } else{
-        document.getElementById("send_msg").innerHTML = "Emails do not match.";
+    } else {
+        document.getElementById("confirm_email_msg").innerHTML = "Emails do not match.";
     }
 
 };

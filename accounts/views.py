@@ -31,7 +31,7 @@ class AddressViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 class GoogleIDViewSet(viewsets.ModelViewSet):
-    queryset = Address.objects.all().order_by('-id')[:10]
+    queryset = Address.objects.all().order_by('-id')[:50]
     serializer_class = GoogleIDSerializer
 
 

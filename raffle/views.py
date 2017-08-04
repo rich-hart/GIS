@@ -34,6 +34,7 @@ class TicketViewSet(viewsets.ModelViewSet):
 class PrizeViewSet(viewsets.ModelViewSet):
     queryset = Prize.objects.all()
     serializer_class = PrizeSerializer
+    permission_classes = [IsStaff,IsAuthenticated]
 
 
 from rest_framework import renderers

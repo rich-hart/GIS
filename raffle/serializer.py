@@ -65,6 +65,6 @@ class PrizeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Prize
         fields = ('id', 'title','image','description','ticket','highlight')
-#        read_only_fields = ('ticket',)
+        read_only_fields = ('ticket',)
 
  

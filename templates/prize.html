@@ -13,9 +13,10 @@
   <img src="{{ image }}" class="w3-circle" style="width:90%;max-width:320px">
   <p>{{description}}</p>
   <br/>
+  {% if ticket %}
   <h3> Winning Ticket: {{ticket}} </h3>
   <h3> Congrats {{winner_first_name}} {{winner_last_name}}!!!!!!</h3>
-
+  {% endif %}
 </div>
 
 

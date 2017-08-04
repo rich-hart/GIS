@@ -45,7 +45,6 @@ class PrizeHighlight(generics.GenericAPIView):
     renderer_classes = (renderers.StaticHTMLRenderer,)
 
     def get(self, request, *args, **kwargs):
-        import ipdb; ipdb.set_trace();
         data = {}
         prize = self.get_object()
         data['image'] = prize.image

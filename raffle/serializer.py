@@ -57,13 +57,14 @@ class PurchaseSerializer(serializers.HyperlinkedModelSerializer):
 class TicketSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Ticket
-        fields = ('id', 'owner')
-        read_only_fields = ('owner',)
+        fields = ('id', 'owner','drawed')
+        read_only_fields = ('owner','drawed')
 
 class PrizeSerializer(serializers.HyperlinkedModelSerializer):
+    highlight = serializers.HyperlinkedIdentityField(view_name='prize-highlight', format='html')
     class Meta:
         model = Prize
-        fields = ('id', 'image','description','ticket')
-        read_only_fields = ('ticket',)
+        fields = ('id', 'title','image','description','ticket','highlight')
+#        read_only_fields = ('ticket',)
 
  

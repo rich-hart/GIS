@@ -45,6 +45,7 @@ from raffle.views import (
    TicketViewSet,
    PurchaserViewSet,
     PrizeViewSet,
+   PrizeHighlight,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -83,7 +84,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
-
+    url(r'^api/prizes/(?P<pk>[0-9]+)/highlight/$', PrizeHighlight.as_view(),name='prize-highlight'),
     url('', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social_django.urls', namespace='social')),
 

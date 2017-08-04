@@ -15,6 +15,9 @@ class Purchaser(models.Model):
 
 class Ticket(models.Model):
     owner = models.ForeignKey(Purchaser, on_delete=models.CASCADE)
+    drawed = models.BooleanField(default=False)
+    def __str__(self):
+        return str(self.id)
 
 class Draw(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
@@ -40,6 +43,7 @@ class Purchase(models.Model):
 
 class Prize(models.Model):
     image = models.URLField()
+    title = models.CharField(max_length = 255)
     description = models.TextField()
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, null=True)
 

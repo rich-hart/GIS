@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Purchaser, Purchase, Ticket 
-
+from .models import Purchaser, Purchase, Ticket, Prize
 
 class PurchaserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -61,5 +60,10 @@ class TicketSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'owner')
         read_only_fields = ('owner',)
 
+class PrizeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Prize
+        fields = ('id', 'image','description','ticket')
+        read_only_fields = ('ticket',)
 
  

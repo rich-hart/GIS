@@ -36,3 +36,10 @@ class Purchase(models.Model):
     )
     buyer = models.ForeignKey(Purchaser, on_delete=models.CASCADE)
     time_stamp = models.DateTimeField(auto_now_add=True)
+
+
+class Prize(models.Model):
+    image = models.URLField()
+    description = models.TextField()
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, null=True)
+

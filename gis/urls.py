@@ -37,12 +37,14 @@ from accounts.views import (
     ProfileViewSet, 
     AddressViewSet, 
     AccountViewSet, 
-    GoogleIDViewSet
+    GoogleIDViewSet,
+
 )
 from raffle.views import (
    PurchaseViewSet, 
    TicketViewSet,
    PurchaserViewSet,
+    PrizeViewSet,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -72,7 +74,8 @@ router.register(r'google_ids', GoogleIDViewSet)
 router.register(r'purchase', PurchaseViewSet)
 router.register(r'purchaser', PurchaserViewSet)
 
-router.register(r'ticket', TicketViewSet)
+router.register(r'tickets', TicketViewSet)
+router.register(r'prizes', PrizeViewSet)
 
 
 urlpatterns = [

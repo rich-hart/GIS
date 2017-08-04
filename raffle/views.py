@@ -54,5 +54,5 @@ class PrizeHighlight(generics.GenericAPIView):
         if prize.ticket:
             data['winner_first_name'] = prize.ticket.owner.first_name
             data['winner_last_name'] = prize.ticket.owner.last_name
-
+            data['ticket'] = prize.ticket.id
         return render(request, 'prize.html',data)

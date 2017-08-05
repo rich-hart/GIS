@@ -6,6 +6,8 @@ from django.conf import settings
 from raffle.models import Purchase, Ticket
 # spawn a new thread to wait for input 
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 class Command(BaseCommand):
     
@@ -29,13 +31,20 @@ class Command(BaseCommand):
                 units = "5 Tickets for $40"
             elif purchase.item == "10X":
                 units = "10 Tickets for $70"           
-            msg = "\n GAAAYSINSPAAACE Purchase: {0}.\n THANK YOU!!!! \n".format(units)                 
+            msg = MIMEMultipart()
+            msg['From'] = from_email
+            msg['To'] = to_email
+            msg['Subject'] = "GAAAYSINSPAAACE PURCHASE"
+
+            body = "\n {0}.\n THANK YOU!!!! \n".format(units)                 
+            msg.attach(MIMEText(body, 'plain'))
+            text = msg.as_string()
             time.sleep(.25) 
-            server.sendmail(from_email, to_email, msg) 
+            server.sendmail(from_email, to_email, text) 
             print("*******************")
             print("FROM: "+ from_email)
             print("TO: " + to_email)
-            print("MESSAGE: " + msg) 
+            print("MESSAGE: " + body) 
 
         server.quit()
          

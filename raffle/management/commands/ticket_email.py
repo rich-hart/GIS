@@ -6,6 +6,9 @@ from django.conf import settings
 from raffle.models import Purchase, Ticket
 # spawn a new thread to wait for input 
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 
 class Command(BaseCommand):
     
@@ -26,17 +29,23 @@ class Command(BaseCommand):
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(options['gmail_account'],options['gmail_password'])
+        from_email = options['gmail_account']
+
         for owner_email, ticket_ids in owner_dict.items():
-            msg = "YOUR GAAAYSINSPAAACE RAFFLE TICKETS!\n"\
-                  "Tickets: {}".format(ticket_ids)
-            from_email = options['gmail_account']
+            msg = MIMEMultipart()
+            msg['From'] = from_email
+            msg['To'] = owner_email
+            msg['Subject'] = "GAAAYSINSPAAACE RAFFLE TICKETS"
+            body = "Tickets: {}".format(ticket_ids)
+            msg.attach(MIMEText(body, 'plain'))
+            text = msg.as_string()
             to_email =  owner_email
             time.sleep(.25)
-            server.sendmail(from_email, to_email, msg)
+            server.sendmail(from_email, to_email, text)
             print("*******************")
             print("FROM: "+ from_email)
             print("TO: " + to_email)
-            print("MESSAGE: " + msg) 
+            print("MESSAGE: " + body) 
         server.quit()
          
         

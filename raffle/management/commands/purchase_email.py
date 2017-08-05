@@ -34,7 +34,7 @@ class Command(BaseCommand):
             msg = MIMEMultipart()
             msg['From'] = from_email
             msg['To'] = to_email
-            msg['Subject'] = "GAAAYSINSPAAACE PURCHASE"
+            msg['Subject'] = "GAAAYSINSPAAACE RAFFLE PURCHASE"
 
             body = "\n {0}.\n THANK YOU!!!! \n".format(units)                 
             msg.attach(MIMEText(body, 'plain'))

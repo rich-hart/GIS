@@ -16,7 +16,7 @@ class Command(BaseCommand):
         parser.add_argument('gmail_password', type=str)
 
     def handle(self, *args, **options):
-        import ipdb; ipdb.set_trace()
+#        import ipdb; ipdb.set_trace()
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(options['gmail_account'],options['gmail_password'])

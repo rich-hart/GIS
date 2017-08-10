@@ -19,6 +19,7 @@ class IsStaff(permissions.BasePermission):
 class PurchaserViewSet(viewsets.ModelViewSet):
     queryset = Purchaser.objects.all()
     serializer_class = PurchaserSerializer 
+    permission_classes = [IsStaff,IsAuthenticated]
 
 
 class PurchaseViewSet(viewsets.ModelViewSet):

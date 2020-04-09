@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
 'thegreattribblehunt-dev.herokuapp.com',
 'gaaaysinspaaace.herokuapp.com',
 'www.thegreattribblehunt.org',
+'172.17.177.11',
 ]
 
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'accounts',
     'tribbles',
     'raffle',
+    'scavenger_hunt',
 ]
 
 MIDDLEWARE = [

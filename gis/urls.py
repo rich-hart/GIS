@@ -41,12 +41,19 @@ from accounts.views import (
 
 )
 from raffle.views import (
-   PurchaseViewSet, 
-   TicketViewSet,
-   PurchaserViewSet,
+    PurchaseViewSet, 
+    TicketViewSet,
+    PurchaserViewSet,
     PrizeViewSet,
-   PrizeHighlight,
+    PrizeHighlight,
 )
+
+from scavenger_hunt.views import (
+    PlayerViewSet,
+    QuestionViewSet,
+    AnswerViewSet,
+)
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -78,6 +85,10 @@ router.register(r'purchaser', PurchaserViewSet)
 router.register(r'tickets', TicketViewSet)
 router.register(r'prizes', PrizeViewSet)
 
+scavenger_hunt_router = routers.DefaultRouter()
+scavenger_hunt_router.register(r'players', PlayerViewSet, base_name='player')
+scavenger_hunt_router.register(r'questions', QuestionViewSet)
+scavenger_hunt_router.register(r'answers', AnswerViewSet)
 
 urlpatterns = [
 
@@ -85,6 +96,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
     url(r'^api/prizes/(?P<pk>[0-9]+)/highlight/$', PrizeHighlight.as_view(),name='prize-highlight'),
+    url(r'^api/scavenger_hunt/', include(scavenger_hunt_router.urls)),
     url('', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social_django.urls', namespace='social')),
 

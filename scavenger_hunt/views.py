@@ -3,11 +3,15 @@ from rest_framework import routers, serializers, viewsets
 from base.views import IsOwner
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
 
-from .models import Player, Question, Answer
+from .models import Player, Question, Answer, Problem, Solution, Challenge, Game
 from .serializers import (
     PlayerSerializer,
     QuestionSerializer,
-    AnswerSerializer
+    AnswerSerializer,
+    ChallengeSerializer,
+    GameSerializer,
+    ProblemSerializer,
+    SolutionSerializer,
 )
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -20,6 +24,26 @@ class AnswerViewSet(viewsets.ModelViewSet):
     serializer_class = AnswerSerializer
     permission_classes = [IsAdminUser]
 
+class ProblemViewSet(viewsets.ModelViewSet):
+    queryset = Problem.objects.all()
+    serializer_class = ProblemSerializer
+    permission_classes = [IsAdminUser]
+
+class SolutionViewSet(viewsets.ModelViewSet):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
+    permission_classes = [IsAdminUser]
+
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = [IsAdminUser]
+
+class ChallengeViewSet(viewsets.ModelViewSet):
+    queryset = Challenge.objects.all()
+    serializer_class = ChallengeSerializer
+    permission_classes = [IsAdminUser]
+
 # Create your views here
 class PlayerViewSet(viewsets.ModelViewSet):
 #    queryset = Profile.objects.all()
@@ -28,15 +52,15 @@ class PlayerViewSet(viewsets.ModelViewSet):
 #    allowed_methods = ['GET','POST',]
 #    lookup_field = 'owner' 
     base_name = 'player'
-    def perform_create(self, serializer):
-        pass
+#    def perform_create(self, serializer):
+#        pass
 #        if not Profile.objects.filter(owner=self.request.user):
 #        address = Address(raw = self.request.data['address'])
 #        address.save()
 #        serializer.save(owner=self.request.user, address = address)
 
-    def perform_update(self, serializer):
-        pass
+#    def perform_update(self, serializer):
+#        pass
 #        import ipdb; ipdb.set_trace()
 #        address = Address(raw = self.request.data['address'])
 #        address.save()

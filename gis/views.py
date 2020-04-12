@@ -74,3 +74,6 @@ def profile_form(request):
     profile.address.save()
     return redirect('/#profile')
 
+def lcars(request):
+    return render(request, 'LCARS-SDK_16323.311/interfaces/color-generator/index.html')
+

@@ -22,6 +22,7 @@ from .views import (
     profile_form,
     qr_code_validator,
     raffle,
+    lcars,
 )
 
 from django.conf.urls import url, include
@@ -52,6 +53,10 @@ from scavenger_hunt.views import (
     PlayerViewSet,
     QuestionViewSet,
     AnswerViewSet,
+    ProblemViewSet,
+    SolutionViewSet,
+    GameViewSet,
+    ChallengeViewSet,
 )
 
 from django.conf import settings
@@ -89,6 +94,10 @@ scavenger_hunt_router = routers.DefaultRouter()
 scavenger_hunt_router.register(r'players', PlayerViewSet, base_name='player')
 scavenger_hunt_router.register(r'questions', QuestionViewSet)
 scavenger_hunt_router.register(r'answers', AnswerViewSet)
+scavenger_hunt_router.register(r'games', GameViewSet)
+scavenger_hunt_router.register(r'problems', ProblemViewSet)
+scavenger_hunt_router.register(r'solutions', SolutionViewSet)
+scavenger_hunt_router.register(r'challenges', ChallengeViewSet)
 
 urlpatterns = [
 
@@ -105,10 +114,15 @@ urlpatterns = [
     url(r'^profile_form/',profile_form),
     url(r'^qr_code_validator/(?P<key>.+)/$',qr_code_validator),
     url(r'^raffle/',raffle),
+    url(r'^lcars/', lcars),
+
 ]
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+#if settings.DEBUG:
+#    urlpatterns = urlpatterns + static('/lcarssdk/', document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + [url(r'^demo/',demo)]

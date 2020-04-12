@@ -8,22 +8,22 @@ class PlayerSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Player
-        fields = ('user',)
+        fields = ('id','user',)
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ('text', )
+        fields = ('id','text', )
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ('text', )
+        fields = ('id','text', )
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ('players',)
+        fields = ('id',)
 
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,8 +38,8 @@ class SolutionSerializer(serializers.ModelSerializer):
 class ChallengeSerializer(serializers.ModelSerializer):
     problem = ProblemSerializer()
     solution = SolutionSerializer()
-    game = GameSerializer()
+
     class Meta:
         model = Challenge
-        fields = ('problem','solution','game')
+        fields = ('id','problem','solution')
 

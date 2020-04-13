@@ -46,7 +46,7 @@ var nemesisUI = {type:'wrapper', id:'wpr_viewport', version:'row', flex:'h', arr
 			//Bracket
             {type:'bracket', template:bracket},
             {type:'wrapper', version:'button-wrap', children:[
-{type:'complexButton', id:'login', template:LCARS.templates.sdk.buttons.complexText.typeA, text:'LOGIN', color:LCARS.colorGen(uiColors)}
+              {type:'complexButton', id:'login', template:LCARS.templates.sdk.buttons.complexText.typeA, text:'LOGIN', color:LCARS.colorGen(uiColors), state:'blink', href:""}
             ]},
 		
 			//Top Button Group
@@ -69,12 +69,9 @@ var nemesisUI = {type:'wrapper', id:'wpr_viewport', version:'row', flex:'h', arr
                 {type:'button', color:LCARS.colorGen(uiColors)}            
             ]},
         ]},
-        {type:'wrapper', version:'button-wrap', children:[
-                {type:'complexButton', id:'logout', template:LCARS.templates.sdk.buttons.complexText.typeA, text:'LOGOUT', color:LCARS.colorGen(uiColors)}
-        ]},
 	
 		{type:'column', style:'justify-content: flex-end;', flexC:'v', flex:'v', children:[
-			{type:'complexButton', text:'55', template:LCARS.templates.sdk.buttons.complexText.typeG, colors:LCARS.colorGroupGen(uiColors, 3)}
+			{type:'complexButton', id:'logout', href:'', text:'LOGOUT', template:LCARS.templates.sdk.buttons.complexText.typeG, colors:LCARS.colorGroupGen(uiColors, 3)}
 		]}
 		
     ]},

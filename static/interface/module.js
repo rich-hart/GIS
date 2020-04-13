@@ -45,7 +45,10 @@ var nemesisUI = {type:'wrapper', id:'wpr_viewport', version:'row', flex:'h', arr
 		
 			//Bracket
             {type:'bracket', template:bracket},
-			
+            {type:'wrapper', version:'button-wrap', children:[
+{type:'complexButton', id:'login', template:LCARS.templates.sdk.buttons.complexText.typeA, text:'LOGIN', color:LCARS.colorGen(uiColors)}
+            ]},
+		
 			//Top Button Group
             {type:'wrapper', flex:'h', version:'button-wrap', children:[
                 {type:'button', color:LCARS.colorGen(uiColors), version:'left'},
@@ -55,7 +58,7 @@ var nemesisUI = {type:'wrapper', id:'wpr_viewport', version:'row', flex:'h', arr
                 {type:'button', color:LCARS.colorGen(uiColors), version:'left'},
                 {type:'button', color:LCARS.colorGen(uiColors)}            
             ]},
-			
+
 			//Bottom Button Group
             {type:'wrapper', flex:'h', version:'button-wrap', children:[
                 {type:'button', color:LCARS.colorGen(uiColors), version:'left'},
@@ -64,9 +67,12 @@ var nemesisUI = {type:'wrapper', id:'wpr_viewport', version:'row', flex:'h', arr
                 {type:'button', color:LCARS.colorGen(uiColors)},
                 {type:'button', color:LCARS.colorGen(uiColors), version:'left', state:'ra_g1'},
                 {type:'button', color:LCARS.colorGen(uiColors)}            
-            ]}
+            ]},
         ]},
-		
+        {type:'wrapper', version:'button-wrap', children:[
+                {type:'complexButton', id:'logout', template:LCARS.templates.sdk.buttons.complexText.typeA, text:'LOGOUT', color:LCARS.colorGen(uiColors)}
+        ]},
+	
 		{type:'column', style:'justify-content: flex-end;', flexC:'v', flex:'v', children:[
 			{type:'complexButton', text:'55', template:LCARS.templates.sdk.buttons.complexText.typeG, colors:LCARS.colorGroupGen(uiColors, 3)}
 		]}

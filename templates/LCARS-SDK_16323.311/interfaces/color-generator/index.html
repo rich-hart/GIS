@@ -70,10 +70,10 @@
 var particle_config =  {
     "particles": {
       "number": {
-        "value": 80,
+        "value": 100,
         "density": {
           "enable": true,
-          "value_area": 800
+          "value_area": 100
         }
       },
       "color": {
@@ -123,7 +123,7 @@ var particle_config =  {
       },
       "move": {
         "enable": true,
-        "speed": 6,
+        "speed": 2,
         "direction": "none",
         "random": false,
         "straight": false,
@@ -187,15 +187,52 @@ var particle_config =  {
 function main(){
   var login = document.getElementById("login");
   var logout = document.getElementById("logout");
-  
+  var delta = document.createElement("img");
+  var profile_pic = document.getElementById('profile_pic')
+  delta.setAttribute('src', '/static/main/delta.png');
+  delta.setAttribute('id', 'delta');
+
   login.setAttribute('href',"{% url 'social:begin' 'facebook' %}")
   logout.setAttribute('href',"/api-auth/logout/?next={{ request.path }}#profile")
-  red_alert();
+//  red_alert();
   particlesJS('profile_pic',particle_config);
+//  profile_pic.insertBefore(delta,profile_pic.childNodes[0]);
+  profile_pic.appendChild(delta);
+//pJSDom[0].pJS.particles.color.value ="#00cc99"
+//pJSDom[0].pJS.particles.color.rgb= hexToRgb(pJSDom[0].pJS.particles.color.value)
+  pJSDom[0].pJS.particles.line_linked.color="#00cc99"
+  pJSDom[0].pJS.particles.line_linked.color_rgb_line =hexToRgb(pJSDom[0].pJS.particles.line_linked.color)
 
 };
 </script>
 
+<style type="text/css">
+#delta {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+  display: inline-block;
+  background-color: transparent;
+    max-width: 100%;
+    max-height: 100%;
+/*background-color: transparent;
+background: transparent;*/
+}
+.particles-js-canvas-el {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 0;
+/*
+background-color: transparent;
+background: transparent;
+*/
+    max-width: 100%;
+    max-height: 100%;
+}
+
+</style>
 
 </html>
 

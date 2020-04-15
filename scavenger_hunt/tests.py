@@ -1,3 +1,4 @@
+import unittest
 from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User, Group
@@ -47,7 +48,7 @@ class PlayerTests(APITestCase):
         )
 
     def test_create(self):
-        import ipdb; ipdb.set_trace()
+#        import ipdb; ipdb.set_trace()
         response = self.client.get(self.url, format='json')
         self.client.login(username='test_user', password='password')
         response = self.client.get(self.url, format='json')
@@ -123,6 +124,8 @@ class GameTests(APITestCase):
         self.url = reverse('game-list')
         self.user = User.objects.create_user(
             username='test_user', email='u@d.com', password='password')
+        self.player = Player.objects.create(user=self.user)
+
         self.users = [
             User.objects.create_user(
                 username='test_user_' + str(i),
@@ -130,86 +133,78 @@ class GameTests(APITestCase):
                 password='password'
             ) for i in range(5)
         ]
+        self.players = [
+            Player.objects.create(user=user)
+            for user in self.users
+        ]
 
-
+    def tearDown(self):
+        Game.objects.all().delete()
 
     def test_anonymous_profile(self):
-        import ipdb; ipdb.set_trace()
         response = self.client.get(self.url, format='json')
         self.assertEqual(
             response.data,
             {"detail":"Authentication credentials were not provided."}
         )
 
-    def test_user_game(self):
-        import ipdb; ipdb.set_trace()
-        response = self.client.get(self.url, format='json')
-        self.client.login(username='test_user', password='password')
+    def test_new_game(self):
+        self.client.force_login(self.user)
         response = self.client.get(self.url, format='json')
         self.assertEqual(
-            response.data,
-            []
+            response.json(),
+            [],
         )
 
-        #response = self.client.get(self.url, format='json')
-        self.client.login(username='test_user', password='password')
-        data = {}
-        response = self.client.post(self.url, data, format='json')
-        data.update({'id': 1})
+        response = self.client.post(self.url+'new_game/', format='json')
+        self.assertDictEqual(
+            response.json(),
+            {'detail': 'You do not have permission to perform this action.'},
+        )
+        self.user.is_staff = True
+        self.user.save()
+
+        response = self.client.post(self.url+'new_game/', format='json')
+
         self.assertEqual(
-            response.data,
-            data
+            response.json(),
+            {'id': 1,'tags': []},
+        )
+        expected = [p for p in Player.objects.all()]
+        returned = [p for p in Game.objects.get(pk=1).players.all()]
+        self.assertListEqual(expected, returned)
+
+    def test_new_featured_game(self):
+        self.test_new_game()
+        response = self.client.put(self.url+'1/feature/', format='json')
+        game = Game.objects.get(pk=1)
+        self.assertEqual(
+            response.json(),
+            {'id': 1, 'tags': [{'id': 1, 'category': 'FE', 'other_category': None}]},
         )
 
-    def test_user_unique_game(self):
-        import ipdb; ipdb.set_trace()
-        self.client.force_login(self.users[0])
+    @unittest.skip("not implemented")
+    def test_new_player(self):
+        self.client.force_login(self.user)
         response = self.client.get(self.url, format='json')
-        self.assertEqual(
-            response.data,
-            []
+        self.assertDictEqual(
+            response.json(),
+            {'detail': 'You do not have permission to perform this action.'},
         )
-
-        #response = self.client.get(self.url, format='json')
-        data = {}
-        response = self.client.post(self.url, data, format='json')
-        data.update({'id': 1})
-        self.assertEqual(
-            response.data,
-            data
-        )
-
-        self.client.force_login(self.users[1])
+        self.user.is_staff = True
+        self.user.save()
         response = self.client.get(self.url, format='json')
+        self.assertEqual(response.json(),[])
+
+        response = self.client.post(self.url, format='json')
+
         self.assertEqual(
-            response.data,
-            []
+            response.json(),
+            {'id': 1},
         )
-
-        #response = self.client.get(self.url, format='json')
-        data = {}
-        response = self.client.post(self.url, data, format='json')
-        data.update({'id': 1})
-        self.assertEqual(
-            response.data,
-            data
-        )
-
-    def test_user_permissions(self):
-        self.test_user_profile()
-        malicious_user = User.objects.create_user(
-        username='malicious_user', email='u@d.com', password='password')
-        url  = os.path.join(self.url,self.user.pk) +'/'
-        self.client.login(username='malicious_user', password='password')
-
-        response = self.client.get(self.url, format='json',follow=True)
-#        response = self.client.get(self.url, format='json')
-        self.assertEqual(
-            response.data,
-            {"detail": "You do not have permission to perform this action."}
-        )
-
-    #"detail": "You do not have permission to perform this action."
+        expected = [p for p in Player.objects.all()]
+        returned = [p for p in Game.objects.get(pk=1).players.all()]
+        self.assertListEqual(expected, returned)
 
 
 

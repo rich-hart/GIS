@@ -1,6 +1,6 @@
 from rest_framework import routers, serializers, viewsets
 
-from .models import Player, Question, Answer, Challenge, Game, Problem, Solution
+from .models import Player, Question, Answer, Challenge, Game, Problem, Solution, Tag
 
 class PlayerSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
@@ -20,10 +20,16 @@ class AnswerSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ('id','text', )
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('id','category','other_category')
+
 class GameSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
     class Meta:
         model = Game
-        fields = ('id',)
+        fields = ('id','tags')
 
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:

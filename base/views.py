@@ -1,6 +1,11 @@
 from django.shortcuts import render
 from rest_framework import permissions
 
+class IsStaff(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+#        import ipdb; ipdb.set_trace()
+        return request.user.is_staff
+
 class IsOwner(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.

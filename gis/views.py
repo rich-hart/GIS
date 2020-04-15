@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import redirect
-from accounts.models import Profile, Address
+from accounts.models import Profile #,Address
 from django.conf import settings
 
 

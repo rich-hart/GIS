@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     # THIRD_PARTY
     'social_django',
     'rest_framework',    
-    'address',
+#    'address',
 
     # PROJECT_APPS
     'accounts',
@@ -145,6 +145,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 
     'accounts.pipeline.save_profile',
+
+    'savenger_hunt.pipeline.create_player',
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#profile'

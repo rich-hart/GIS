@@ -31,14 +31,13 @@ from rest_framework import routers, serializers, viewsets
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
 from tribbles.models import Tribble
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
 from accounts.views import (
     UserViewSet, 
     ProfileViewSet, 
-    AddressViewSet, 
+#    AddressViewSet, 
     AccountViewSet, 
-    GoogleIDViewSet,
+#    GoogleIDViewSet,
 
 )
 from raffle.views import (
@@ -76,14 +75,14 @@ class TribbleSerializer(serializers.HyperlinkedModelSerializer):
 # ViewSets define the view behavior.
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'accounts', AccountViewSet, base_name='account')
+router.register(r'accounts', AccountViewSet, basename='account')
 
 router.register(r'tribbles', TribbleViewSet)
 
-router.register(r'profile', ProfileViewSet, base_name='profile')
-router.register(r'addresses', AddressViewSet)
+router.register(r'profile', ProfileViewSet, basename='profile')
+#router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
-router.register(r'google_ids', GoogleIDViewSet)
+#router.register(r'google_ids', GoogleIDViewSet)
 router.register(r'purchase', PurchaseViewSet)
 router.register(r'purchaser', PurchaserViewSet)
 
@@ -91,7 +90,7 @@ router.register(r'tickets', TicketViewSet)
 router.register(r'prizes', PrizeViewSet)
 
 scavenger_hunt_router = routers.DefaultRouter()
-scavenger_hunt_router.register(r'players', PlayerViewSet, base_name='player')
+scavenger_hunt_router.register(r'players', PlayerViewSet, basename='player')
 scavenger_hunt_router.register(r'questions', QuestionViewSet)
 scavenger_hunt_router.register(r'answers', AnswerViewSet)
 scavenger_hunt_router.register(r'games', GameViewSet)
@@ -106,7 +105,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api/prizes/(?P<pk>[0-9]+)/highlight/$', PrizeHighlight.as_view(),name='prize-highlight'),
     url(r'^api/scavenger_hunt/', include(scavenger_hunt_router.urls)),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+    url('', include('django.contrib.auth.urls')),
     url('', include('social_django.urls', namespace='social')),
 
     url(r'^$', home, name='home'),

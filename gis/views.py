@@ -34,10 +34,10 @@ def home(request):
         data['username'] = user.username
     else:
         data['username'] = user.username
-        data['address'] = user.profile.address.raw
-        data['google_id'] = user.profile.address.google_id
-        data['longitude'] = user.profile.address.longitude
-        data['latitude'] = user.profile.address.latitude
+#        data['address'] = user.profile.address.raw
+#        data['google_id'] = user.profile.address.google_id
+#        data['longitude'] = user.profile.address.longitude
+#        data['latitude'] = user.profile.address.latitude
         data['tribble']= request.GET.get('tribble')
     return render(request, 'home.html', data)
 

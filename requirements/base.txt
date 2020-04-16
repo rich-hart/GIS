@@ -4,5 +4,6 @@ djangorestframework
 psycopg2
 social-auth-app-django
 whitenoise
+PyYAML
 #-e git+https://github.com/rich-hart/django-address.git#egg=django-address
 #django-address

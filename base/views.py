@@ -7,6 +7,7 @@ class IsStaff(permissions.BasePermission):
 #        return request.user.is_staff
     def has_permission(self, request, view):
         return request.user.is_staff
+
 class IsOwner(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.

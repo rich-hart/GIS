@@ -31,21 +31,37 @@ class GameSerializer(serializers.ModelSerializer):
         model = Game
         fields = ('id','tags')
 
-class ProblemSerializer(serializers.ModelSerializer):
+class PlayerSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    game_set = GameSerializer(many=True, read_only=True)
+    class Meta:
+        model = Player
+        fields = ('id','user','game_set')
+
+
+class ProblemSerializer(serializers.HyperlinkedModelSerializer):
+    question = QuestionSerializer()
     class Meta:
         model = Problem
-        fields = ('id',)
+        fields = ('id','question')
 
-class SolutionSerializer(serializers.ModelSerializer):
+class SolutionSerializer(serializers.HyperlinkedModelSerializer):
+    answer = AnswerSerializer()
     class Meta:
         model = Solution
-        fields = ('id',)
+        fields = ('id','answer')
 
 class ChallengeSerializer(serializers.ModelSerializer):
     problem = ProblemSerializer()
     solution = SolutionSerializer()
-
+    #serializers.HiddenField(default=timezone.now)
     class Meta:
         model = Challenge
-        fields = ('id','problem','solution')
+        fields = ('id','problem','solution',)
+        read_only_fields = ('id', 'problem',)
+        extra_kwargs = {
+            'solution': {'write_only': True},
+        }
 

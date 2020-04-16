@@ -22,6 +22,9 @@ from django.test import TestCase, RequestFactory
 from .models import *
 from .pipeline import create_player
 
+def join_paths(*args):
+    return os.path.join(*args)+'/'
+
 class PlayerTests(APITestCase):
     def setUp(self): 
 #        import ipdb; ipdb.set_trace()
@@ -75,14 +78,14 @@ class PlayerTests(APITestCase):
         response = self.client.get(self.url, format='json')
         self.assertEqual(
             response.json(),
-            [{'id': 1}]
+            [{'id': 1,'game_set': []}]
         )
         create_player(None, self.user,None)
         create_player(None, self.user,None)
         response = self.client.get(self.url, format='json')
         self.assertEqual(
             response.json(),
-            [{'id': 1}],
+            [{'id': 1,'game_set': []}],
         )
 
 
@@ -92,8 +95,28 @@ class PlayerTests(APITestCase):
         self.client.force_login(self.users[-1])
         response = self.client.get(self.url, format='json')
         self.assertEqual(
-            response.data,
-            [{'id': 5}],
+            response.json(),
+            [{'id': 5,'game_set': []}],
+        )
+
+    def test_join_featured_game(self):
+        #[create_player(None, u ,None) for u in self.users]
+        create_player(None,self.user, None)
+        game = Game()
+        game.save()
+        tag = Tag(category=Tag.Type.featured.value,game=game)
+        tag.save()
+        self.client.force_login(self.user)
+        play_featured_game_url = join_paths(
+            self.url,
+            ##str(self.user.player.pk),
+            'join_featured_game'
+        )
+        response = self.client.put(play_featured_game_url, format='json')
+        expected = {'id': 1, 'game_set': [{'id': 1, 'tags': [{'category': 'FE', 'id': 1, 'other_category': None}]}]}
+        returned = response.json()
+        self.assertEqual(
+            expected, returned
         )
 
     def test_user_permissions(self):
@@ -183,28 +206,73 @@ class GameTests(APITestCase):
             {'id': 1, 'tags': [{'id': 1, 'category': 'FE', 'other_category': None}]},
         )
 
-    @unittest.skip("not implemented")
-    def test_new_player(self):
-        self.client.force_login(self.user)
-        response = self.client.get(self.url, format='json')
-        self.assertDictEqual(
-            response.json(),
-            {'detail': 'You do not have permission to perform this action.'},
-        )
-        self.user.is_staff = True
-        self.user.save()
-        response = self.client.get(self.url, format='json')
-        self.assertEqual(response.json(),[])
+    def test_next_challenge(self):
+        self.test_new_game()
+        self.answer = Answer.objects.create(text='Answer.')
+        self.question = Question.objects.create(text='Question?')
+        self.challenge = Challenge.objects.create(game_id=1, problem=self.question, solution=self.answer)
+        response = self.client.get(self.url+'1/next_challenge/', format='json')
 
-        response = self.client.post(self.url, format='json')
+
 
         self.assertEqual(
             response.json(),
-            {'id': 1},
+            {'id': 1, 'problem': {'id': 1, 'question': {'id': 1, 'text': 'Question?'}}}
         )
-        expected = [p for p in Player.objects.all()]
-        returned = [p for p in Game.objects.get(pk=1).players.all()]
-        self.assertListEqual(expected, returned)
 
 
+class ChallengeTests(APITestCase):
+    def setUp(self): 
+#        import ipdb; ipdb.set_trace()
+        self.url = reverse('challenge-list')
+        self.user = User.objects.create_user(
+            username='test_user', email='u@d.com', password='password')
+        self.game = Game.objects.create()
 
+        self.player = Player.objects.create(user=self.user)
+        self.player.game_set.add(self.game)
+        self.player.save()
+
+        self.users = [
+            User.objects.create_user(
+                username='test_user_' + str(i),
+                email='u@d.com',
+                password='password'
+            ) for i in range(5)
+        ]
+        self.players = [
+        ]
+        for user in self.users:
+            player = Player.objects.create(user=user)
+            player.game_set.add(self.game)
+            self.players.append(player)
+
+        self.answer = Answer.objects.create(text='Answer.')
+        self.question = Question.objects.create(text='Question?')
+        self.challenge = Challenge.objects.create(game=self.game, problem=self.question, solution=self.answer)
+        self.challenges =[]
+        for _ in range(5):
+            answer = Answer.objects.create(text='Answer.')
+            question = Question.objects.create(text='Question?')
+            challenge = Challenge.objects.create(game=self.game, problem=question, solution=answer)
+            self.challenges.append(challenge)
+    def tearDown(self):
+        Game.objects.all().delete()
+
+    def test_anonymous_profile(self):
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.data,
+            {"detail":"Authentication credentials were not provided."}
+        )
+
+    def test_solve(self):
+        import ipdb; ipdb.set_trace()
+        self.client.force_login(self.user)
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.json(),
+            [],
+        )
+
+        

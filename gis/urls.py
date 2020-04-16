@@ -57,7 +57,7 @@ from scavenger_hunt.views import (
     GameViewSet,
     ChallengeViewSet,
 )
-
+from scavenger_hunt.routers import router as scavenger_hunt_router
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -89,14 +89,6 @@ router.register(r'purchaser', PurchaserViewSet)
 router.register(r'tickets', TicketViewSet)
 router.register(r'prizes', PrizeViewSet)
 
-scavenger_hunt_router = routers.DefaultRouter()
-scavenger_hunt_router.register(r'players', PlayerViewSet, basename='player')
-scavenger_hunt_router.register(r'questions', QuestionViewSet)
-scavenger_hunt_router.register(r'answers', AnswerViewSet)
-scavenger_hunt_router.register(r'games', GameViewSet)
-scavenger_hunt_router.register(r'problems', ProblemViewSet)
-scavenger_hunt_router.register(r'solutions', SolutionViewSet)
-scavenger_hunt_router.register(r'challenges', ChallengeViewSet)
 
 urlpatterns = [
 

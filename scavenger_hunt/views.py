@@ -5,20 +5,16 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes as permissions 
 from rest_framework.decorators import action
 from base.views import IsStaff
-
-from .models import (
- Player, Question, Answer, Problem, Solution, Challenge, Game, Tag
-)
-from .serializers import (
-    PlayerSerializer,
-    QuestionSerializer,
-    AnswerSerializer,
-    ChallengeSerializer,
-    GameSerializer,
-    ProblemSerializer,
-    SolutionSerializer,
-)
 from rest_framework.response import Response
+from rest_framework import permissions
+
+from .models import * 
+from .serializers import *
+
+class IsUnlocked(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        import ipdb; ipdb.set_trace()
+        return obj.owner == request.user
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
@@ -45,6 +41,7 @@ class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer
 #    permission_classes = [IsAuthenticated]
     permission_classes = [IsAuthenticated]
+
     def get_queryset(self):
         player = self.request.user.player
         games = Game.objects.filter(players__id=player.id)
@@ -61,6 +58,18 @@ class GameViewSet(viewsets.ModelViewSet):
         serializer.is_valid()
         serializer.save(players=Player.objects.all()) 
         return Response(serializer.data)
+    #FIXME: Need Player and Challenge pemission classes
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated])
+    def next_challenge(self, request, pk):
+        completed_challenges = Achievement.objects.filter(player=request.user.player).values('challenge')
+        challenges = Challenge.objects.filter(game__id=pk)
+        remaining_challenges = challenges.exclude(pk__in=completed_challenges.values('pk'))
+        next_challenge = remaining_challenges.order_by('index').first()
+        serializer = ChallengeSerializer(next_challenge)
+        data = serializer.data
+        data.pop('solution')
+        return Response(data)
+
 
     @action(detail=True, methods=['put'], permission_classes=[IsAdminUser|IsStaff])
     def feature(self, request, pk):
@@ -94,7 +103,26 @@ class GameViewSet(viewsets.ModelViewSet):
 class ChallengeViewSet(viewsets.ModelViewSet):
     queryset = Challenge.objects.all()
     serializer_class = ChallengeSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated,IsUnlocked]
+
+    @action(detail=True, methods=['put'])
+    def solve(self, request, pk):
+        challenge = Challenge.objects.get(pk=pk)
+        tags = game.tags.filter(category=Tag.Type.featured.value)
+        #if game.tags.filter(category=Tag.Type.featured.value):
+        if not tags:
+            Tag.objects.create(game=game, category=Tag.Type.featured.value)  
+        serializer=GameSerializer(game)
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        pass
+
+    def perform_update(self, serializer):
+        pass
+
+    def perform_destroy(self, serializer):
+        pass
 
 # Create your views here
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -104,6 +132,16 @@ class PlayerViewSet(viewsets.ModelViewSet):
 #    allowed_methods = ['GET','POST',]
 #    lookup_field = 'owner' 
     base_name = 'player'
+
+    @action(detail=False, methods=['put'])
+    def join_featured_game(self, request):
+        player = request.user.player
+        current_featured_game = Game.objects.filter(tag__category=Tag.Type.featured.value).first()
+        if not current_featured_game.players.filter(pk=player.pk).exists():
+            current_featured_game.players.add(player)
+            current_featured_game.save()
+        serializer=PlayerSerializer(player)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         pass

@@ -22,7 +22,7 @@ class Tag(models.Model):
         def get_choices(cls):
             choices = [(e.value,e.name) for _,e in enumerate(cls) ]
             return choices
-
+    created = models.DateTimeField(auto_now_add=True)
     game = models.ForeignKey(
         Game,
         on_delete=models.CASCADE,
@@ -42,6 +42,8 @@ class Tag(models.Model):
         null = True,
         blank = True,
     )
+    class Meta:
+        ordering = ['-created']
 
 class Problem(models.Model):
     pass
@@ -65,4 +67,21 @@ class Challenge(models.Model):
         on_delete=models.CASCADE,
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-  
+    index = models.IntegerField(default=1)
+
+    class Meta:
+        ordering = ['index','id']
+
+class Achievement(models.Model):
+    player = models.OneToOneField(
+        Player,
+        on_delete=models.CASCADE,
+        related_name='player_achievements',
+        related_query_name='player_achievements',
+    )
+    challenge = models.OneToOneField(
+        Challenge,
+        on_delete=models.DO_NOTHING,
+    )
+    verified = models.DateTimeField(default=None,null=True,blank=True)
+

@@ -1,6 +1,6 @@
 from rest_framework import routers, serializers, viewsets
 
-from .models import Player, Question, Answer, Challenge, Game, Problem, Solution, Tag
+from .models import *
 
 class PlayerSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
@@ -53,15 +53,26 @@ class SolutionSerializer(serializers.HyperlinkedModelSerializer):
         model = Solution
         fields = ('id','answer')
 
+
+
 class ChallengeSerializer(serializers.ModelSerializer):
     problem = ProblemSerializer()
-    solution = SolutionSerializer()
-    #serializers.HiddenField(default=timezone.now)
+    #solution = SolutionSerializer()
+    #solution = serializers.HiddenField(default="ANSWER")
+
     class Meta:
         model = Challenge
-        fields = ('id','problem','solution',)
+        fields = ('id','problem',)
         read_only_fields = ('id', 'problem',)
-        extra_kwargs = {
-            'solution': {'write_only': True},
-        }
+#        extra_kwargs = {
+#            'solution': {'write_only': True},
+#        }
+class AchievementSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer()
+    challenge = ChallengeSerializer()
+
+    class Meta:
+        model = Challenge
+        fields = ('id','player','challenge')
+        read_only_fields = ('id', 'player','challenge')
 

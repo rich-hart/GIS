@@ -1,3 +1,6 @@
+import re
+from django.utils import timezone
+from fuzzywuzzy import fuzz
 from django.shortcuts import render
 from rest_framework import routers, serializers, viewsets
 from base.views import IsOwner
@@ -13,8 +16,7 @@ from .serializers import *
 
 class IsUnlocked(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        import ipdb; ipdb.set_trace()
-        return obj.owner == request.user
+        return True
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
@@ -67,7 +69,7 @@ class GameViewSet(viewsets.ModelViewSet):
         next_challenge = remaining_challenges.order_by('index').first()
         serializer = ChallengeSerializer(next_challenge)
         data = serializer.data
-        data.pop('solution')
+        data.pop('solution',None)
         return Response(data)
 
 
@@ -99,6 +101,9 @@ class GameViewSet(viewsets.ModelViewSet):
 #        address = Address(raw = self.request.data['address'])
 #        address.save()
 #        serializer.save(owner=self.request.user, address = addres)
+def clean_answer(text):
+    text = re.sub('[^a-z]+', '',text.lower())
+    return text
 
 class ChallengeViewSet(viewsets.ModelViewSet):
     queryset = Challenge.objects.all()
@@ -107,13 +112,20 @@ class ChallengeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['put'])
     def solve(self, request, pk):
+        response = {}
         challenge = Challenge.objects.get(pk=pk)
-        tags = game.tags.filter(category=Tag.Type.featured.value)
-        #if game.tags.filter(category=Tag.Type.featured.value):
-        if not tags:
-            Tag.objects.create(game=game, category=Tag.Type.featured.value)  
-        serializer=GameSerializer(game)
-        return Response(serializer.data)
+        answer = clean_answer(challenge.solution.answer.text)
+        player_answer = clean_answer(request.data.get('answer',''))
+        if fuzz.ratio(answer,player_answer) > 94:
+            (achievement, created) = Achievement.objects.get_or_create(player=request.user.player,challenge=challenge)
+            if created:
+                achievement.verified = timezone.now()
+                achievement.save()
+            response['message']="Solution correct!"
+        else:
+            #penalty
+            response['message']="Solution incorrect!"
+        return Response(response)
 
     def perform_create(self, serializer):
         pass
@@ -123,6 +135,12 @@ class ChallengeViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, serializer):
         pass
+
+    def get_queryset(self):
+
+        game_query = self.request.user.player.game_set.all()
+        challenge_query = Challenge.objects.filter(game_id__in=game_query.all().values('id'))
+        return challenge_query
 
 # Create your views here
 class PlayerViewSet(viewsets.ModelViewSet):

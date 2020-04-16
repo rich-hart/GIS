@@ -257,6 +257,7 @@ class ChallengeTests(APITestCase):
             challenge = Challenge.objects.create(game=self.game, problem=question, solution=answer)
             self.challenges.append(challenge)
     def tearDown(self):
+        Achievement.objects.all().delete()
         Game.objects.all().delete()
 
     def test_anonymous_profile(self):
@@ -267,12 +268,15 @@ class ChallengeTests(APITestCase):
         )
 
     def test_solve(self):
-        import ipdb; ipdb.set_trace()
         self.client.force_login(self.user)
         response = self.client.get(self.url, format='json')
         self.assertEqual(
-            response.json(),
-            [],
+            len(response.json()),
+            6,
         )
+        returned = Achievement.objects.filter(player=self.user.player,challenge=self.challenge).exists()
+        self.assertFalse(returned) 
+        self.client.put(self.url+'1/solve/', data={'answer':'answer'},format='json')
+        returned = Achievement.objects.filter(player=self.user.player,challenge=self.challenge).exists()
+        self.assertTrue(returned) 
 
-        

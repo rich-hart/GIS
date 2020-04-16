@@ -147,7 +147,7 @@ SOCIAL_AUTH_PIPELINE = (
 
     'accounts.pipeline.save_profile',
 
-    'savenger_hunt.pipeline.create_player',
+    'scavenger_hunt.pipeline.create_player',
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#profile'

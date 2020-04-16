@@ -1,38 +1,27 @@
 from django.shortcuts import render
-from .serializers import (UserSerializer, ProfileSerializer, AddressSerializer
-,AccountSerializer, GoogleIDSerializer)
+from .serializers import (UserSerializer, ProfileSerializer, 
+#AddressSerializer,
+AccountSerializer,
+#GoogleIDSerializer,
+)
 from rest_framework import routers, serializers, viewsets
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
+from base.views import IsOwner
 from .models import Profile
-from .models import Address
-
-from rest_framework import permissions
+#from .models import Address
 
 
-class IsOwner(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
 
-    def has_object_permission(self, request, view, obj):
-#        import ipdb; ipdb.set_trace()
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-#        if request.method in permissions.SAFE_METHODS:
-#            return True
 
-        # Write permissions are only allowed to the owner of the snippet.
-        return obj.owner == request.user
+#class AddressViewSet(viewsets.ModelViewSet):
+#    queryset = Address.objects.all()
+#    serializer_class = AddressSerializer
+#    permission_classes = [IsAdminUser]
 
-class AddressViewSet(viewsets.ModelViewSet):
-    queryset = Address.objects.all()
-    serializer_class = AddressSerializer
-    permission_classes = [IsAdminUser]
-
-class GoogleIDViewSet(viewsets.ModelViewSet):
-    queryset = Address.objects.all().order_by('-id')[:50]
-    serializer_class = GoogleIDSerializer
+#class GoogleIDViewSet(viewsets.ModelViewSet):
+#    queryset = Address.objects.all().order_by('-id')[:50]
+#    serializer_class = GoogleIDSerializer
 
 
 
@@ -48,6 +37,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     lookup_field = 'owner'
     base_name = 'account'
     allowed_methods = ['GET']
+
 class ProfileViewSet(viewsets.ModelViewSet):
 #    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -55,18 +45,18 @@ class ProfileViewSet(viewsets.ModelViewSet):
 #    allowed_methods = ['GET','POST',]
 #    lookup_field = 'owner' 
     base_name = 'profile'
-    def perform_create(self, serializer):
+#    def perform_create(self, serializer):
 
 #        if not Profile.objects.filter(owner=self.request.user):
-        address = Address(raw = self.request.data['address'])
-        address.save()
-        serializer.save(owner=self.request.user, address = address)
+#        address = Address(raw = self.request.data['address'])
+#        address.save()
+#        serializer.save(owner=self.request.user, address = address)
 
-    def perform_update(self, serializer):
+#    def perform_update(self, serializer):
 #        import ipdb; ipdb.set_trace()
-        address = Address(raw = self.request.data['address'])
-        address.save()
-        serializer.save(owner=self.request.user, address = address)
+#        address = Address(raw = self.request.data['address'])
+#        address.save()
+#        serializer.save(owner=self.request.user, address = address)
 
     
     def get_queryset(self):

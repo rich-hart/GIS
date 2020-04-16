@@ -1,0 +1,3 @@
+[submodule "static/particles"]
+	path = static/particles
+	url = git@github.com:rich-hart/particles.js.git

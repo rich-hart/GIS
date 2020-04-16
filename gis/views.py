@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import redirect
-from accounts.models import Profile, Address
+from accounts.models import Profile #,Address
 from django.conf import settings
 
 
@@ -73,4 +73,7 @@ def profile_form(request):
     profile.address.latitude = request.POST.get('latitude')
     profile.address.save()
     return redirect('/#profile')
+
+def lcars(request):
+    return render(request, 'LCARS-SDK_16323.311/interfaces/color-generator/index.html')
 

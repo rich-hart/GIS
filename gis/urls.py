@@ -22,6 +22,7 @@ from .views import (
     profile_form,
     qr_code_validator,
     raffle,
+    lcars,
 )
 
 from django.conf.urls import url, include
@@ -30,23 +31,33 @@ from rest_framework import routers, serializers, viewsets
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
 from tribbles.models import Tribble
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
 from tribbles.views import TribbleViewSet
 from accounts.views import (
     UserViewSet, 
     ProfileViewSet, 
-    AddressViewSet, 
+#    AddressViewSet, 
     AccountViewSet, 
-    GoogleIDViewSet,
+#    GoogleIDViewSet,
 
 )
 from raffle.views import (
-   PurchaseViewSet, 
-   TicketViewSet,
-   PurchaserViewSet,
+    PurchaseViewSet, 
+    TicketViewSet,
+    PurchaserViewSet,
     PrizeViewSet,
-   PrizeHighlight,
+    PrizeHighlight,
 )
+
+from scavenger_hunt.views import (
+    PlayerViewSet,
+    QuestionViewSet,
+    AnswerViewSet,
+    ProblemViewSet,
+    SolutionViewSet,
+    GameViewSet,
+    ChallengeViewSet,
+)
+from scavenger_hunt.routers import router as scavenger_hunt_router
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -64,14 +75,14 @@ class TribbleSerializer(serializers.HyperlinkedModelSerializer):
 # ViewSets define the view behavior.
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'accounts', AccountViewSet, base_name='account')
+router.register(r'accounts', AccountViewSet, basename='account')
 
 router.register(r'tribbles', TribbleViewSet)
 
-router.register(r'profile', ProfileViewSet, base_name='profile')
-router.register(r'addresses', AddressViewSet)
+router.register(r'profile', ProfileViewSet, basename='profile')
+#router.register(r'addresses', AddressViewSet)
 router.register(r'users', UserViewSet)
-router.register(r'google_ids', GoogleIDViewSet)
+#router.register(r'google_ids', GoogleIDViewSet)
 router.register(r'purchase', PurchaseViewSet)
 router.register(r'purchaser', PurchaserViewSet)
 
@@ -85,7 +96,8 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
     url(r'^api/prizes/(?P<pk>[0-9]+)/highlight/$', PrizeHighlight.as_view(),name='prize-highlight'),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+    url(r'^api/scavenger_hunt/', include(scavenger_hunt_router.urls)),
+    url('', include('django.contrib.auth.urls')),
     url('', include('social_django.urls', namespace='social')),
 
     url(r'^$', home, name='home'),
@@ -93,10 +105,15 @@ urlpatterns = [
     url(r'^profile_form/',profile_form),
     url(r'^qr_code_validator/(?P<key>.+)/$',qr_code_validator),
     url(r'^raffle/',raffle),
+    url(r'^lcars/', lcars),
+
 ]
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+#if settings.DEBUG:
+#    urlpatterns = urlpatterns + static('/lcarssdk/', document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + [url(r'^demo/',demo)]

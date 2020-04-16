@@ -11,7 +11,7 @@ import os
 from rest_framework.test import APIRequestFactory
 from .serializers import TribbleSerializer
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from django.contrib.auth.models import User, Group
 from rest_framework.response import Response
 
@@ -23,7 +23,7 @@ class TribbleViewSet(viewsets.ModelViewSet):
 #    lookup_value_regex = '[0-9a-f]{32}'
     permission_classes=[IsAuthenticated]
 
-    @detail_route()
+    @action(detail=True)
     def hunt(self, request, key):
         tribble = self.get_object()
         if tribble.owner:
@@ -38,7 +38,7 @@ class TribbleViewSet(viewsets.ModelViewSet):
         serializer = TribbleSerializer(tribble, many=False, context={'request': request})
         return Response(data)
       
-    @detail_route()
+    @action(detail=True)
     def release(self, request, key):
         tribble = self.get_object()
         if request.user.is_staff:

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
 'thegreattribblehunt-dev.herokuapp.com',
 'gaaaysinspaaace.herokuapp.com',
 'www.thegreattribblehunt.org',
+'172.17.177.11',
 ]
 
 
@@ -49,12 +50,13 @@ INSTALLED_APPS = [
     # THIRD_PARTY
     'social_django',
     'rest_framework',    
-    'address',
+#    'address',
 
     # PROJECT_APPS
     'accounts',
     'tribbles',
     'raffle',
+    'scavenger_hunt',
 ]
 
 MIDDLEWARE = [
@@ -143,6 +145,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 
     'accounts.pipeline.save_profile',
+
+    'savenger_hunt.pipeline.create_player',
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#profile'
@@ -224,6 +228,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+#    os.path.join(BASE_DIR, "static","lcarssdk"),
 ]
 
 

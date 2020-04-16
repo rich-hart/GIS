@@ -42,7 +42,7 @@
          url('../fonts/lcars-mono-webfont.woff2') format('woff2'),
          url('../fonts/lcars-mono-webfont.woff') format('woff'),
 		 url('../fonts/LCARS-Mono.ttf') format('truetype'),
-         url('../lcars-mono-webfont.svg#lcars-monoregular') format('svg');
+         url('../fonts/lcars-mono-webfont.svg#lcars-monoregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -54,7 +54,7 @@
          url('../fonts/lcars-mono-webfont.woff2') format('woff2'),
          url('../fonts/lcars-mono-webfont.woff') format('woff'),
 		 url('../fonts/LCARS-Mono.ttf') format('truetype'),
-         url('../lcars-mono-webfont.svg#lcars-monoregular') format('svg');
+         url('../fonts/lcars-mono-webfont.svg#lcars-monoregular') format('svg');
     font-weight: normal;
     font-style: normal;
 

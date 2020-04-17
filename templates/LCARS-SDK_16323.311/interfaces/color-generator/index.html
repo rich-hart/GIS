@@ -186,14 +186,22 @@ var particle_config =  {
 
 function main(){
   var login = document.getElementById("login");
+
   var logout = document.getElementById("logout");
   var delta = document.createElement("img");
-  var profile_pic = document.getElementById('profile_pic')
+  var profile_pic = document.getElementById('profile_pic');
   delta.setAttribute('src', '/static/main/delta.png');
   delta.setAttribute('id', 'delta');
 
+{% if username %}
+logout.setAttribute('href',"/api-auth/logout/?next={{ request.path }}#profile")
+login.children[1].textContent = "{{username}}"
+login.classList.remove('blink')
+{% else %}
+
   login.setAttribute('href',"{% url 'social:begin' 'facebook' %}")
-  logout.setAttribute('href',"/api-auth/logout/?next={{ request.path }}#profile")
+  logout.parentElement.remove(logout)
+{% endif %}
 //  red_alert();
   particlesJS('profile_pic',particle_config);
 //  profile_pic.insertBefore(delta,profile_pic.childNodes[0]);

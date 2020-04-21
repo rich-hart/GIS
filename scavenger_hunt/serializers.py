@@ -76,3 +76,12 @@ class AchievementSerializer(serializers.ModelSerializer):
         fields = ('id','player','challenge')
         read_only_fields = ('id', 'player','challenge')
 
+class DemoSerializer(serializers.ModelSerializer):
+    problem = ProblemSerializer()
+    answer = serializers.HiddenField(default = 'ANSWER HERE')
+
+    class Meta:
+        model = Challenge
+        fields = ('id','problem','answer')
+
+

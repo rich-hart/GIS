@@ -9,4 +9,5 @@ router.register(r'games', GameViewSet)
 router.register(r'problems', ProblemViewSet)
 router.register(r'solutions', SolutionViewSet)
 router.register(r'challenges', ChallengeViewSet)
+router.register(r'demo', DemoViewSet,basename='demo')
 

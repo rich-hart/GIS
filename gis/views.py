@@ -75,5 +75,24 @@ def profile_form(request):
     return redirect('/#profile')
 
 def lcars(request):
-    return render(request, 'LCARS-SDK_16323.311/interfaces/color-generator/index.html')
+    data = {
+      'username': None,
+      'address': None,
+      'tribble': None,
+      'google_id': None,
+      'longitude': None,
+      'latitude': None,
+      'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
+    }
+#    import ipdb; ipdb.set_trace()
+    user = request.user
+#    import ipdb; ipdb.set_trace()
+
+    if user.is_anonymous:
+        pass
+    elif user.is_superuser:
+        data['username'] = user.username
+    else:
+        data['username'] = user.username
+    return render(request, 'LCARS-SDK_16323.311/interfaces/color-generator/index.html',data)
 

@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 #from myproject.apps.core.models import Account
-from selenium import webdriver
+#from selenium import webdriver
 from django.test import LiveServerTestCase
 import shutil
 import os

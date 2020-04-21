@@ -102,7 +102,8 @@ class GameViewSet(viewsets.ModelViewSet):
 #        address.save()
 #        serializer.save(owner=self.request.user, address = addres)
 def clean_answer(text):
-    text = re.sub('[^a-z]+', '',text.lower())
+    if text:
+        text = re.sub('[^a-z]+', '',text.lower())
     return text
 
 class ChallengeViewSet(viewsets.ModelViewSet):
@@ -170,4 +171,46 @@ class PlayerViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Player.objects.filter(user=user)
+
+# Create your views here
+class DemoViewSet(PlayerViewSet):
+#    queryset = Profile.objects.all()
+
+    def join_featured_game(self, request):
+        player = request.user.player
+        if not player:
+            return Response({})
+        current_featured_game = Game.objects.filter(tag__category=Tag.Type.featured.value).first()
+        if not current_featured_game.players.filter(pk=player.pk).exists():
+            current_featured_game.players.add(player)
+            current_featured_game.save()
+
+        completed_challenges = Achievement.objects.filter(player=request.user.player).values('challenge')
+        challenges = Challenge.objects.filter(game__id=current_featured_game.pk)
+        remaining_challenges = challenges.exclude(pk__in=completed_challenges.values('pk'))
+        next_challenge = remaining_challenges.order_by('index').first()
+        serializer = ChallengeSerializer(next_challenge)
+        data = serializer.data
+        data.pop('solution',None)
+        data['answer'] ='Answer here!'
+        serializer=PlayerSerializer(player)
+        data.update(serializer.data)
+
+        response = {}
+        challenge = Challenge.objects.get(pk=next_challenge.pk)
+        answer = clean_answer(challenge.solution.answer.text)
+        player_answer = clean_answer(request.data.get('answer',''))
+        if fuzz.ratio(answer,player_answer) > 94:
+            (achievement, created) = Achievement.objects.get_or_create(player=request.user.player,challenge=challenge)
+            if created:
+                achievement.verified = timezone.now()
+                achievement.save()
+            response['message']="Solution correct!"
+        else:
+            #penalty
+            response['message']="Solution incorrect!"
+        response.update(data)
+        return Response(response)
+    
+
 

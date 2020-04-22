@@ -14,4 +14,5 @@ router.register(r'solutions', SolutionViewSet)
 router.register(r'challenges', ChallengeViewSet)
 router.register(r'demo', DemoViewSet,basename='demo')
 router.register(r'hidden_challenges', HiddenChallengeViewSet,basename='hidden_challenge')
-
+router.register(r'awards', AwardViewSet, basename='award')
+router.register(r'rewards', RewardViewSet)

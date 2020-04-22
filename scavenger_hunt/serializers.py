@@ -128,6 +128,20 @@ class PlayerSerializer(serializers.ModelSerializer):
         model = Player
         fields = ('id','user')
 
+class RewardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reward
+        fields = ('id','challenge','category','description')
+
+
+class AwardSerializer(serializers.ModelSerializer):
+#    reward = RewardSerializer()
+    class Meta:
+        model = Award
+        fields = ('id','player','reward')
+        read_only_fields = fields
+
+
 class AvatarSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),

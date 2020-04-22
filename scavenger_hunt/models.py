@@ -55,6 +55,48 @@ class Achievement(Base):
     )
     verified = models.DateTimeField(default=None,null=True,blank=True)
 
+class Reward(Base):
+    class Type(Enum):
+        general = 'general'
+        clue = 'clue'
+        praise = 'praise'
+        points = 'points'
+        key = 'key'
+        powers = 'powers'
+        promotion = 'promotion'
+        completion = 'completion'
+        media = 'media'
+        @classmethod
+        def get_choices(cls):
+            return [ (name,value) for (name,value) in enumerate(cls) ]
+
+    challenge = models.ForeignKey(
+        Challenge,
+        on_delete=models.DO_NOTHING,
+    )
+    category = models.CharField(
+        max_length=127,
+        default = Type.general.value,
+        choices=Type.get_choices(),
+    )
+    description = models.TextField()
+    unique = models.BooleanField(default=False)
+    class Meta:
+        ordering = ['-created']
+
+class Award(Base):
+    player = models.ForeignKey(
+        Player,
+        on_delete=models.DO_NOTHING,
+    )
+    reward = models.ForeignKey(
+        Reward,
+        on_delete=models.DO_NOTHING,
+    )
+    class Meta:
+        ordering = ['-created']
+
+
 class Penalty(Base):
     player = models.ForeignKey(
         Player,

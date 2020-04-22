@@ -43,15 +43,16 @@ class IsPlayer(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-#        import ipdb; ipdb.set_trace()
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-#        if request.method in permissions.SAFE_METHODS:
-#            return True
-
-        # Write permissions are only allowed to the owner of the snippet.
         return request.user.player
 
+class IsRewardUnLocked(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        achievement = Achievement.objects.get(challenge=obj.challenge, player=request.user.player)
+        return achievement.verified
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
@@ -225,6 +226,62 @@ def clean_answer(text):
 #        return challenge_query
 
 # Create your views here
+class RewardViewSet(viewsets.ModelViewSet):
+    queryset = Reward.objects.all()
+    serializer_class = RewardSerializer
+    permission_classes = [
+        IsStaff,
+        IsAdminUser,
+    ]
+
+    #FIXME: Figure out how to hide form from user
+    @action(detail=True, methods=['get','post'], permission_classes=[IsAuthenticated,IsPlayer, IsRewardUnLocked])
+    def accept(self, request, pk):
+        response= {'message':None}
+        award = None
+        player = self.request.user.player
+        reward = Reward.objects.get(pk=pk)
+        if request.method=='POST':
+            #NOTE: WARNING logic for reward not implemented
+            award, _ = Award.objects.get_or_create(player=player, reward=reward)
+        if award:
+            response['message']='accepted'
+        return Response(response)
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated,IsPlayer])
+    def pending(self, request, pk=None):
+#        import ipdb; ipdb.set_trace()
+        response = []
+        player = self.request.user.player
+        awards = Award.objects.filter(player=player)
+      
+        achievements = Achievement.objects.filter(player=player)
+        achievements = achievements.exclude(verified__isnull=True)
+        rewards = Reward.objects.filter(challenge__in=achievements.values('challenge'))
+        rewards = rewards.exclude(challenge__in=awards.values('reward'))
+        response.extend(rewards.all().values('pk'))
+        return Response(response)
+
+
+class AwardViewSet(viewsets.ModelViewSet):
+    serializer_class = AwardSerializer
+    permission_classes = [IsAuthenticated,IsPlayer]
+    base_name = 'award'
+
+    def perform_create(self, serializer):
+        pass
+
+    def perform_update(self, serializer):
+        pass
+
+    def perform_destroy(self, serializer):
+        pass
+
+    def get_queryset(self):
+        awards_query = Award.objects.filter(player=self.request.user.player)
+        return awards_query
+
+
 class HiddenChallengeViewSet(viewsets.ModelViewSet):
     serializer_class = HiddenChallengeSerializer
     permission_classes = [IsAuthenticated,IsPlayer]

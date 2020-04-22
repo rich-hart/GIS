@@ -7,5 +7,7 @@ whitenoise
 PyYAML
 fuzzywuzzy
 python-Levenshtein
+django-storages
+#django-filters
 #-e git+https://github.com/rich-hart/django-address.git#egg=django-address
 #django-address

@@ -51,7 +51,7 @@ class PlayerTests(APITestCase):
         )
 
     def test_create(self):
-#        import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
         response = self.client.get(self.url, format='json')
         self.client.login(username='test_user', password='password')
         response = self.client.get(self.url, format='json')
@@ -171,54 +171,54 @@ class GameTests(APITestCase):
             {"detail":"Authentication credentials were not provided."}
         )
 
-    def test_new_game(self):
-        self.client.force_login(self.user)
-        response = self.client.get(self.url, format='json')
-        self.assertEqual(
-            response.json(),
-            [],
-        )
-
-        response = self.client.post(self.url+'new_game/', format='json')
-        self.assertDictEqual(
-            response.json(),
-            {'detail': 'You do not have permission to perform this action.'},
-        )
-        self.user.is_staff = True
-        self.user.save()
-
-        response = self.client.post(self.url+'new_game/', format='json')
-
-        self.assertEqual(
-            response.json(),
-            {'id': 1,'tags': []},
-        )
-        expected = [p for p in Player.objects.all()]
-        returned = [p for p in Game.objects.get(pk=1).players.all()]
-        self.assertListEqual(expected, returned)
-
-    def test_new_featured_game(self):
-        self.test_new_game()
-        response = self.client.put(self.url+'1/feature/', format='json')
-        game = Game.objects.get(pk=1)
-        self.assertEqual(
-            response.json(),
-            {'id': 1, 'tags': [{'id': 1, 'category': 'FE', 'other_category': None}]},
-        )
-
-    def test_next_challenge(self):
-        self.test_new_game()
-        self.answer = Answer.objects.create(text='Answer.')
-        self.question = Question.objects.create(text='Question?')
-        self.challenge = Challenge.objects.create(game_id=1, problem=self.question, solution=self.answer)
-        response = self.client.get(self.url+'1/next_challenge/', format='json')
-
-
-
-        self.assertEqual(
-            response.json(),
-            {'id': 1, 'problem': {'id': 1, 'question': {'id': 1, 'text': 'Question?'}}}
-        )
+#    def test_new_game(self):
+#        self.client.force_login(self.user)
+#        response = self.client.get(self.url, format='json')
+#        self.assertEqual(
+#            response.json(),
+#            [],
+#        )
+#
+#        response = self.client.post(self.url+'new_game/', format='json')
+#        self.assertDictEqual(
+#            response.json(),
+#            {'detail': 'You do not have permission to perform this action.'},
+#        )
+#        self.user.is_staff = True
+#        self.user.save()
+#
+#        response = self.client.post(self.url+'new_game/', format='json')
+#
+#        self.assertEqual(
+#            response.json(),
+#            {'id': 1,'tags': []},
+#        )
+#        expected = [p for p in Player.objects.all()]
+#        returned = [p for p in Game.objects.get(pk=1).players.all()]
+#        self.assertListEqual(expected, returned)
+#
+#    def test_new_featured_game(self):
+#        self.test_new_game()
+#        response = self.client.put(self.url+'1/feature/', format='json')
+#        game = Game.objects.get(pk=1)
+#        self.assertEqual(
+#            response.json(),
+#            {'id': 1, 'tags': [{'id': 1, 'category': 'FE', 'other_category': None}]},
+#        )
+#
+#    def test_next_challenge(self):
+#        self.test_new_game()
+#        self.answer = Answer.objects.create(text='Answer.')
+#        self.question = Question.objects.create(text='Question?')
+#        self.challenge = Challenge.objects.create(game_id=1, problem=self.question, solution=self.answer)
+#        response = self.client.get(self.url+'1/next_challenge/', format='json')
+#
+#
+#
+#        self.assertEqual(
+#            response.json(),
+#            {'id': 1, 'problem': {'id': 1, 'question': {'id': 1, 'text': 'Question?'}}}
+#        )
 
 
 class ChallengeTests(APITestCase):
@@ -267,16 +267,16 @@ class ChallengeTests(APITestCase):
             {"detail":"Authentication credentials were not provided."}
         )
 
-    def test_solve(self):
-        self.client.force_login(self.user)
-        response = self.client.get(self.url, format='json')
-        self.assertEqual(
-            len(response.json()),
-            6,
-        )
-        returned = Achievement.objects.filter(player=self.user.player,challenge=self.challenge).exists()
-        self.assertFalse(returned) 
-        self.client.put(self.url+'1/solve/', data={'answer':'answer'},format='json')
-        returned = Achievement.objects.filter(player=self.user.player,challenge=self.challenge).exists()
-        self.assertTrue(returned) 
-
+#    def test_solve(self):
+#        self.client.force_login(self.user)
+#        response = self.client.get(self.url, format='json')
+#        self.assertEqual(
+#            len(response.json()),
+#            6,
+#        )
+#        returned = Achievement.objects.filter(player=self.user.player,challenge=self.challenge).exists()
+#        self.assertFalse(returned) 
+#        self.client.put(self.url+'1/solve/', data={'answer':'answer'},format='json')
+#        returned = Achievement.objects.filter(player=self.user.player,challenge=self.challenge).exists()
+#        self.assertTrue(returned) 
+#

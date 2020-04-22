@@ -50,10 +50,13 @@ INSTALLED_APPS = [
 
     # THIRD_PARTY
     'social_django',
-    'rest_framework',    
+    'rest_framework',
+    'storages',
+    'django_filters',
 #    'address',
 
     # PROJECT_APPS
+    'base',
     'accounts',
     'tribbles',
     'raffle',
@@ -82,6 +85,10 @@ AUTHENTICATION_BACKENDS = (
 
 
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyA5aEe7r30H-mXsJWnyrHxwuNUlSKMYaTI'
 
@@ -226,6 +233,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+#MEDIA_ROOT =  
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

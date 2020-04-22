@@ -1,54 +1,24 @@
 from enum import Enum
 from django.db import models
 from django.contrib.auth.models import User
+
+from base.models import Base, Tag
 # Create your models here.
 
 
-class Player(models.Model):
+class Player(Base):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
     )
 
-class Game(models.Model):
-    players = models.ManyToManyField(Player,default=None)
-    created = models.DateTimeField(auto_now_add=True)
-#    updated = models.DateTimeField(auto_now=True)
+class Game(Base):
+    players = models.ManyToManyField(Player)
 
-class Tag(models.Model):
-    class Type(Enum):
-        featured = "FE"
-        @classmethod
-        def get_choices(cls):
-            choices = [(e.value,e.name) for _,e in enumerate(cls) ]
-            return choices
-    created = models.DateTimeField(auto_now_add=True)
-    game = models.ForeignKey(
-        Game,
-        on_delete=models.CASCADE,
-        related_name="tags",
-        related_query_name="tag",
-    )
-    category = models.CharField(
-        max_length=2,
-        choices=Type.get_choices(),
-        null = True,
-        blank = True,
-        default=None,
-    ) 
-    other_category = models.CharField(
-        max_length=255,
-        default=None,
-        null = True,
-        blank = True,
-    )
-    class Meta:
-        ordering = ['-created']
-
-class Problem(models.Model):
+class Problem(Base):
     pass
 
-class Solution(models.Model):
+class Solution(Base):
     pass
 
 class Question(Problem):
@@ -57,7 +27,7 @@ class Question(Problem):
 class Answer(Solution):
     text = models.TextField()
 
-class Challenge(models.Model):
+class Challenge(Base):
     problem = models.OneToOneField(
         Problem,
         on_delete=models.CASCADE,
@@ -66,13 +36,13 @@ class Challenge(models.Model):
         Solution,
         on_delete=models.CASCADE,
     )
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, related_name='challenges', on_delete=models.CASCADE,default=None,null=True,blank=True)
     index = models.IntegerField(default=1)
 
     class Meta:
         ordering = ['index','id']
 
-class Achievement(models.Model):
+class Achievement(Base):
     player = models.OneToOneField(
         Player,
         on_delete=models.CASCADE,

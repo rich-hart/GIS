@@ -1,5 +1,5 @@
 from rest_framework import routers, serializers, viewsets
-
+from rest_framework.validators import UniqueValidator
 from .models import *
 
 
@@ -63,6 +63,32 @@ class ChallengeSerializer(serializers.ModelSerializer):
 #            'solution': {'write_only': True},
 #        }
 
+class HiddenChallengeSerializer(serializers.ModelSerializer):
+#    solution = SolutionSerializer()
+    problem = ProblemSerializer(read_only=True)
+    answer = serializers.CharField(default='ANSWER_HERE',allow_blank=False, trim_whitespace=True)
+
+    class Meta:
+        model = Challenge
+        fields = ('id','answer','problem')
+        read_only_fields = ('problem',)
+#        extra_kwargs = {
+#            'solution': {'write_only': True},
+#        }
+
+class PenaltySerializer(serializers.ModelSerializer):
+#    solution = SolutionSerializer()
+#    problem = ProblemSerializer(read_only=True)
+#    answer = serializers.CharField(default='ANSWER_HERE',allow_blank=False, trim_whitespace=True)
+
+    class Meta:
+        model = Challenge
+        fields = ('id','created')
+        read_only_fields = fields
+#        extra_kwargs = {
+#            'solution': {'write_only': True},
+#        }
+
 class GameSerializer(serializers.ModelSerializer):
 #    challenge_set = ChallengeSerializer()
     class Meta:
@@ -102,3 +128,18 @@ class PlayerSerializer(serializers.ModelSerializer):
         model = Player
         fields = ('id','user')
 
+class AvatarSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+#        validators=[UniqueValidator(queryset=User.objects.all())],
+    )
+#    game_set = GameSerializer(many=True, read_only=True)
+    class Meta:
+        model = Player
+        fields = ('id','user','game_set')
+#        read_only_fields = ('user',)
+        extra_kwargs = {
+            'user': {
+                'validators': [UniqueValidator(queryset=User.objects.all())],
+            }
+        }

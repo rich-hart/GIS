@@ -43,15 +43,23 @@ class Challenge(Base):
         ordering = ['index','id']
 
 class Achievement(Base):
-    player = models.OneToOneField(
+    player = models.ForeignKey(
         Player,
         on_delete=models.CASCADE,
-        related_name='player_achievements',
-        related_query_name='player_achievements',
+#        related_name='player_achievements',
+#        related_query_name='player_achievements',
     )
-    challenge = models.OneToOneField(
+    challenge = models.ForeignKey(
         Challenge,
         on_delete=models.DO_NOTHING,
     )
     verified = models.DateTimeField(default=None,null=True,blank=True)
+
+class Penalty(Base):
+    player = models.ForeignKey(
+        Player,
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
 

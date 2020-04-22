@@ -25,6 +25,72 @@ from .pipeline import create_player
 def join_paths(*args):
     return os.path.join(*args)+'/'
 
+class AvatarTests(APITestCase):
+    def setUp(self): 
+#        import ipdb; ipdb.set_trace()
+        self.url = reverse('avatar-list')
+        self.user = User.objects.create_user(
+            username='test_user', email='u@d.com', password='password')
+        self.users = [
+            User.objects.create_user(
+                username='test_user_' + str(i),
+                email='u@d.com',
+                password='password'
+            ) for i in range(5)
+        ]
+
+    def tearDown(self):
+        User.objects.all().delete()
+
+
+    def test_anonymous_player(self):
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.data,
+            {"detail":"Authentication credentials were not provided."}
+        )
+
+    def test_create(self):
+        import ipdb; ipdb.set_trace()
+        response = self.client.get(self.url, format='json')
+        self.client.login(username='test_user', password='password')
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.data,
+            []
+        )
+
+        #response = self.client.get(self.url, format='json')
+        self.client.login(username='test_user', password='password')
+        data = {}
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(
+            response.data,
+            data
+        )
+
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.data,
+            []
+        )
+        create_player(None, self.user,None)
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.json(),
+            [{'id': 1,'game_set': []}]
+        )
+        create_player(None, self.user,None)
+        create_player(None, self.user,None)
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(
+            response.json(),
+            [{'id': 1,'game_set': []}],
+        )
+
+
+
+
 class PlayerTests(APITestCase):
     def setUp(self): 
 #        import ipdb; ipdb.set_trace()

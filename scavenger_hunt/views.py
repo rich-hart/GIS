@@ -21,6 +21,37 @@ class IsUnlocked(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return True
 
+class IsAvatar(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+#        import ipdb; ipdb.set_trace()
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+#        if request.method in permissions.SAFE_METHODS:
+#            return True
+
+        # Write permissions are only allowed to the owner of the snippet.
+        return obj == request.user.player
+
+class IsPlayer(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+#        import ipdb; ipdb.set_trace()
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+#        if request.method in permissions.SAFE_METHODS:
+#            return True
+
+        # Write permissions are only allowed to the owner of the snippet.
+        return request.user.player
+
+
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
@@ -193,6 +224,132 @@ def clean_answer(text):
 #        return challenge_query
 
 # Create your views here
+class HiddenChallengeViewSet(viewsets.ModelViewSet):
+    serializer_class = HiddenChallengeSerializer
+    permission_classes = [IsAuthenticated,IsPlayer]
+    base_name = 'hidden_challenge'
+
+    def perform_create(self, serializer):
+        pass
+
+    def perform_update(self, serializer):
+        pass
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated,IsPlayer])
+    def solve(self, request, pk):
+        import ipdb; ipdb.set_trace()
+        response = {}
+        player = request.user.player
+        player_answer_text = request.data.get('answer')
+
+        player_answer_text = clean_answer(player_answer_text)
+        challenge = Challenge.objects.get(pk=pk)
+        game = challenge.game
+        solution_answer_text = challenge.solution.answer.text
+        if fuzz.ratio(player_answer_text, solution_answer_text) > 94:
+            (achievement, created) = Achievement.objects.get_or_create(player=player,challenge=challenge)
+            if created:
+                achievement.verified = timezone.now()
+                achievement.save()
+            response['message']="Solution correct!"
+        else:
+            penalty = Penalty.objects.create(player=player, game=game)
+            response['message']="Solution incorrect!"
+            response['penalty'] = {'created': penalty.created}
+        return Response(response)
+            #penalty
+#            response['message']="Solution incorrect!"
+#        return Response({'message':"Solution incorrect!"})
+#        pass
+#        answer = clean_answer(challenge.solution.answer.text)
+#        player_answer = clean_answer(request.data.get('answer',''))
+#        if fuzz.ratio(answer,player_answer) > 94:
+#            (achievement, created) = Achievement.objects.get_or_create(player=request.user.player,challenge=challenge)
+#            if created:
+#                achievement.verified = timezone.now()
+#                achievement.save()
+#            response['message']="Solution correct!"
+#        else:
+#            #penalty
+#            response['message']="Solution incorrect!"
+#        return Response(response)
+
+
+    def perform_destroy(self, serializer):
+        pass
+#    @action(detail=True, methods=['get','post'], permission_classes=[IsAuthenticated,IsPlayer])
+#    def solve(self, request, pk=None):
+##        import ipdb; ipdb.set_trace()
+#        serializer = ChallengeSerializer(data={})
+#        serializer.is_valid()
+#        return Response(serializer.data)
+
+    def get_queryset(self):
+        game_query = self.request.user.player.game_set.all()
+        challenge_query = Challenge.objects.filter(game_id__in=game_query.all())
+        return challenge_query
+    
+class AvatarViewSet(viewsets.ModelViewSet):
+#    queryset = Player.objects.all()
+    serializer_class = AvatarSerializer
+    permission_classes = [IsAuthenticated,IsAvatar]
+    base_name = 'avatar'
+
+    def perform_create(self, serializer):
+        pass
+
+    def get_queryset(self):
+        user = self.request.user
+        return Player.objects.filter(user=user)
+
+
+
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated,IsAvatar])
+    def challenges(self, request, pk):
+#        import ipdb; ipdb.set_trace()
+        game_pk=request.query_params.get('game')
+        data = []
+        player = request.user.player
+        if game_pk:
+            games = player.game_set.filter(pk=game_pk)
+        else:
+            games =  player.game_set.all()
+
+        #game_pks = games.values_list(flat=True)
+        game_pks = games.values_list('pk',flat=True)  
+        challenges = Challenge.objects.filter(game_id__in = game_pks)
+        completed_challenges = Achievement.objects.filter(player=request.user.player).values('challenge')
+
+#        completed_serializer = ChallengeSerializer(completed_challenges,many=True)
+#        completed_data = completed_serializer.data
+        completed_challenges = challenges.filter(pk__in=completed_challenges.values('pk'))
+        completed_serializer = ChallengeSerializer(completed_challenges,many=True)
+        completed_data = completed_serializer.data
+        remaining_challenges = challenges.exclude(pk__in=completed_challenges.values('pk'))
+        remaining_serializer = HiddenChallengeSerializer(remaining_challenges,many=True)
+        remaining_data = remaining_serializer.data
+#        [ challenge_data.pop('solution',None) for challenge_data in remaining_data ] 
+#            challenge_data.pop('solution')
+#        data = {}
+#        serializer =  ChallengeSerializer(challenges,many=True)
+        data = completed_data + remaining_data
+        return Response(data)
+#    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated,IsAvatar])
+#    def game(self, request, pk):
+#        import ipdb; ipdb.set_trace()
+#        data = {}
+#        return Response(data)
+#        completed_challenges = Achievement.objects.filter(player=request.user.player).values('challenge')
+#        challenges = Challenge.objects.filter(game__id=pk)
+#        remaining_challenges = challenges.exclude(pk__in=completed_challenges.values('pk'))
+#        next_challenge = remaining_challenges.order_by('index').first()
+#        serializer = ChallengeSerializer(next_challenge)
+#        data = serializer.data
+#        data.pop('solution',None)
+#        return Response(data)
+
+
+
 class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer

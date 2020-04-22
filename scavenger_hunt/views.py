@@ -1,4 +1,5 @@
 import re
+from datetime import timedelta, datetime
 #import django_filters.rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -237,14 +238,32 @@ class HiddenChallengeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated,IsPlayer])
     def solve(self, request, pk):
-        import ipdb; ipdb.set_trace()
-        response = {}
+        response = {'alert':None}
+        challenge = Challenge.objects.get(pk=pk)
+        game = challenge.game
+        cooldown = timedelta(minutes=5)
+
         player = request.user.player
+
+#        previous_penalties = Penalty.objects.filter(player=player,game=game,created__gte=datetime.now()-cooldown)
+        query_params = {
+            'player': player,
+            'game': game,
+            'created__gte': datetime.now()-cooldown,
+            'tag__name': 'red',
+        }
+        penalties = Penalty.objects.filter(**query_params)
+        if penalties:
+            response['alert'] = 'red'
+            cooldown_ends = penalties.first().created+cooldown
+            cooldown_ends_str = cooldown_ends.strftime("%H:%M:%S")
+            description = f"Red alert ends at {cooldown_ends_str}"
+            response['description'] = description
+            return Response(response)
         player_answer_text = request.data.get('answer')
 
         player_answer_text = clean_answer(player_answer_text)
-        challenge = Challenge.objects.get(pk=pk)
-        game = challenge.game
+
         solution_answer_text = challenge.solution.answer.text
         if fuzz.ratio(player_answer_text, solution_answer_text) > 94:
             (achievement, created) = Achievement.objects.get_or_create(player=player,challenge=challenge)
@@ -253,7 +272,42 @@ class HiddenChallengeViewSet(viewsets.ModelViewSet):
                 achievement.save()
             response['message']="Solution correct!"
         else:
+
+            query_params = {
+                'player': player,
+                'game': game,
+                'created__gte': datetime.now()-cooldown,
+                'tag__name': 'yellow',
+            }
+            yellow_penalties = Penalty.objects.filter(**query_params)
+            query_params = {
+                'player': player,
+                'game': game,
+                'created__gte': datetime.now()-cooldown,
+                'tag__name': 'general',
+            }
+            general_penalties = Penalty.objects.filter(**query_params)
             penalty = Penalty.objects.create(player=player, game=game)
+
+            if yellow_penalties:
+                tag_type = PenaltyTag.Type.red.value
+                cooldown_ends = datetime.now()+cooldown
+                cooldown_ends_str = cooldown_ends.strftime("%H:%M:%S")
+                description = f"Red alert ends at {cooldown_ends_str}"
+                penalty_tag =  PenaltyTag.objects.create(instance=penalty, name=tag_type)
+                response['alert'] = 'red'
+                response['description'] = description
+            elif general_penalties:
+#                penalty = Penalty.objects.create(player=player, game=game)
+                tag_type = PenaltyTag.Type.yellow.value
+                penalty_tag =  PenaltyTag.objects.create(instance=penalty, name=tag_type)
+                response['alert'] = 'yellow'
+            else:
+                tag_type = PenaltyTag.Type.general.value
+                penalty_tag =  PenaltyTag.objects.create(instance=penalty, name=tag_type)
+                response['alert'] = 'general'
+
+            #penalty_tag = PenaltyTag.objects.create(penalty, name=PenaltyTag.Type.general.value)
             response['message']="Solution incorrect!"
             response['penalty'] = {'created': penalty.created}
         return Response(response)

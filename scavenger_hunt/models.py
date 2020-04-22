@@ -63,3 +63,26 @@ class Penalty(Base):
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
 
+class PenaltyTag(Base):
+    class Type(Enum):
+        yellow = 'yellow'
+        red = 'red'
+        general = 'general'
+        @classmethod
+        def get_choices(cls):
+            return [ (name,value) for (name,value) in enumerate(cls) ]
+    instance = models.ForeignKey(
+        Penalty,
+        on_delete=models.CASCADE,
+        related_name="tags",
+        related_query_name="tag",
+    )
+    name = models.CharField(
+        max_length=127,
+        default = Type.general.value,
+        choices=Type.get_choices(),
+    )
+    description = models.TextField()
+    class Meta:
+
+        ordering = ['-created']

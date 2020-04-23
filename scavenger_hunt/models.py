@@ -2,6 +2,7 @@ from enum import Enum
 from django.db import models
 from django.contrib.auth.models import User
 
+from gis.storage_backends import MediaStorage, StaticStorage
 from base.models import Base, Tag
 # Create your models here.
 
@@ -23,6 +24,8 @@ class Solution(Base):
 
 class Question(Problem):
     text = models.TextField()
+    video = models.FileField(storage=MediaStorage(),default=None,null=True,blank=True)
+    picture = models.FileField(storage=MediaStorage(),default=None,null=True,blank=True)
 
 class Answer(Solution):
     text = models.TextField()

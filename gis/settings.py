@@ -88,7 +88,11 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
 }
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyA5aEe7r30H-mXsJWnyrHxwuNUlSKMYaTI'

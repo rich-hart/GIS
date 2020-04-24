@@ -2,7 +2,7 @@ import re
 from datetime import timedelta, datetime
 #import django_filters.rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer, JSONRenderer
 from django.utils import timezone
 from fuzzywuzzy import fuzz
 from django.shortcuts import render
@@ -152,6 +152,8 @@ class NewPlayerViewSet(BaseRoleFilterModelViewSet):
 
     role_filter_classes = [AdminRoleFilter, PlayerRoleFilter, StaffRoleFilter]
 
+    template_name = 'rest_framework/api.html'
+    renderer_classes = [BrowsableAPIRenderer,JSONRenderer]
 
 #    def perform_create(self, serializer):
 #        serializer.save(user=self.request.user)

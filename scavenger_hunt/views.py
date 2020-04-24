@@ -499,12 +499,42 @@ class PlayerCompletedChallengeFilter(RoleFilter):
         # list create retrieve update partial_update destroy
         return ['list', 'retrieve']
 
+#    def get_queryset(self, request, view, queryset):
+#        player = request.user.player
+#        games =  player.game_set.all()
+#        game_pks = games.values_list('pk',flat=True)
+#        queryset = Challenge.objects.filter(game_id__in = game_pks)
+#        return queryset
+
     def get_queryset(self, request, view, queryset):
+#        game_pk=request.query_params.get('game')
+#        data = []
         player = request.user.player
+#        if game_pk:
+#            games = player.game_set.filter(pk=game_pk)
+#        else:
         games =  player.game_set.all()
-        game_pks = games.values_list('pk',flat=True)
-        queryset = Challenge.objects.filter(game_id__in = game_pks)
+
+        #game_pks = games.values_list(flat=True)
+        game_pks = games.values_list('pk',flat=True)  
+        challenges = Challenge.objects.filter(game_id__in = game_pks)
+        completed_challenges = Achievement.objects.filter(player=player).values('challenge')
+
+#        completed_serializer = ChallengeSerializer(completed_challenges,many=True)
+#        completed_data = completed_serializer.data
+        queryset = challenges.filter(pk__in=completed_challenges)
+#        completed_serializer = ChallengeSerializer(completed_challenges,many=True)
+#        completed_data = completed_serializer.data
+#        remaining_challenges = challenges.exclude(pk__in=completed_challenges.values('pk'))
+#        remaining_serializer = HiddenChallengeSerializer(remaining_challenges,many=True)
+#        remaining_data = remaining_serializer.data
+#        [ challenge_data.pop('solution',None) for challenge_data in remaining_data ] 
+#            challenge_data.pop('solution')
+#        data = {}
+#        serializer =  ChallengeSerializer(challenges,many=True)
+#        data = completed_data + remaining_data
         return queryset
+
 
     def get_serializer_class(self, request, view):
         return ChallengeSerializer
@@ -541,35 +571,6 @@ class NewCompletedChallengeViewSet(BaseRoleFilterModelViewSet):
 #    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated,IsAvatar])
 #    def challenges(self, request, pk):
 #        import ipdb; ipdb.set_trace()
-    def get_queryset(self):
-#        import ipdb; ipdb.set_trace()
-#        game_pk=request.query_params.get('game')
-#        data = []
-        player = self.request.user.player
-#        if game_pk:
-#            games = player.game_set.filter(pk=game_pk)
-#        else:
-        games =  player.game_set.all()
-
-        #game_pks = games.values_list(flat=True)
-        game_pks = games.values_list('pk',flat=True)  
-        challenges = Challenge.objects.filter(game_id__in = game_pks)
-        completed_challenges = Achievement.objects.filter(player=player).values('challenge')
-
-#        completed_serializer = ChallengeSerializer(completed_challenges,many=True)
-#        completed_data = completed_serializer.data
-        queryset = challenges.filter(pk__in=completed_challenges)
-#        completed_serializer = ChallengeSerializer(completed_challenges,many=True)
-#        completed_data = completed_serializer.data
-#        remaining_challenges = challenges.exclude(pk__in=completed_challenges.values('pk'))
-#        remaining_serializer = HiddenChallengeSerializer(remaining_challenges,many=True)
-#        remaining_data = remaining_serializer.data
-#        [ challenge_data.pop('solution',None) for challenge_data in remaining_data ] 
-#            challenge_data.pop('solution')
-#        data = {}
-#        serializer =  ChallengeSerializer(challenges,many=True)
-#        data = completed_data + remaining_data
-        return queryset
 
 
 class PlayerChallengeFilter(RoleFilter):
@@ -582,10 +583,16 @@ class PlayerChallengeFilter(RoleFilter):
         return ['list', 'retrieve', 'update', 'solve',None]
 
     def get_queryset(self, request, view, queryset):
+#        import ipdb; ipdb.set_trace()
         player = request.user.player
         games =  player.game_set.all()
         game_pks = games.values_list('pk',flat=True)
-        queryset = Challenge.objects.filter(game_id__in = game_pks)
+        challenge = Challenge.objects.filter(game_id__in = game_pks)
+        completed_challenges = Achievement.objects.filter(player=player).values('challenge')
+#        completed_challenges = Challenge.objects.filter(pk__in=completed_challenges)
+#        queryset = challenge.exclude(completed_challenges)
+#        queryset = set(challenge).difference(set(completed_challenges))
+        queryset = challenge.exclude(pk__in=completed_challenges)
         return queryset
 
     def get_serializer_class(self, request, view):

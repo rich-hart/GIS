@@ -44,6 +44,9 @@ class Challenge(Base):
 
     class Meta:
         ordering = ['index','id']
+        permissions = [
+            ("access_challenge", "Can access the challenge"),
+        ]
 
 class Achievement(Base):
     player = models.ForeignKey(
@@ -86,6 +89,9 @@ class Reward(Base):
     unique = models.BooleanField(default=False)
     class Meta:
         ordering = ['-created']
+        permissions = [
+            ("access_reward", "Can access the reward"),
+        ]
 
 class Award(Base):
     player = models.ForeignKey(
@@ -129,5 +135,4 @@ class PenaltyTag(Base):
     )
     description = models.TextField()
     class Meta:
-
         ordering = ['-created']

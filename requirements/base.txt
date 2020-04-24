@@ -12,3 +12,5 @@ django-storages
 #-e git+https://github.com/rich-hart/django-address.git#egg=django-address
 #django-address
 boto3
+django-guardian
+djangorestframework-role-filters

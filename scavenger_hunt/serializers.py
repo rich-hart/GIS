@@ -34,6 +34,32 @@ class SolutionSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
+class NewChallengeSerializer(serializers.ModelSerializer):
+    solution = SolutionSerializer()
+    problem = ProblemSerializer()
+#    game = serializers.RelatedField(source='game', read_only=False,queryset=Game.objects.all(),)
+#    game_id = serializers.PrimaryKeyRelatedField(many=False, read_only=False)
+
+#    game = GameSerializer()
+#    game_id = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    #solution = SolutionSerializer()
+    #solution = serializers.HiddenField(default="ANSWER")
+    def create(self, validated_data):
+#        import ipdb; ipdb.set_trace()
+        a_serializer=AnswerSerializer(data=validated_data['solution']['answer']) 
+        a_serializer.is_valid()
+        answer = a_serializer.save()
+        q_serializer=QuestionSerializer(data=validated_data['problem']['question']) 
+        q_serializer.is_valid()
+        question = q_serializer.save()
+        game = validated_data['game']
+        challenge = Challenge.objects.create(problem=question,solution=answer,game=game)
+        return challenge
+
+    class Meta:
+        model = Challenge
+        fields = ('id','problem','solution','game')
+
 class ChallengeSerializer(serializers.ModelSerializer):
     solution = SolutionSerializer()
     problem = ProblemSerializer()

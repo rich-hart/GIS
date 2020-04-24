@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'storages',
     'django_filters',
 #    'address',
-
+    'guardian',
     # PROJECT_APPS
     'base',
     'accounts',
@@ -82,8 +82,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
 #    'social_core.backends.facebook.Facebook.OAuth2',
     'django.contrib.auth.backends.ModelBackend',
-
-
+    'guardian.backends.ObjectPermissionBackend',
 )
 
 REST_FRAMEWORK = {

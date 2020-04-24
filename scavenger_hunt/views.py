@@ -47,7 +47,7 @@ class PlayerRoleFilter(RoleFilter):
     role_id = 'player'
 
     def get_allowed_actions(self, request, view, obj=None):
-        return ['list', 'retrieve']
+        return ['list', 'retrieve', 'update']
 
     def get_queryset(self, request, view, queryset):
         queryset = queryset.filter(user=request.user)
@@ -60,9 +60,11 @@ class PlayerRoleFilter(RoleFilter):
         fields = (
             'id',
             'user',
+            'game_set',
         )
         serializer_class.Meta.fields = fields
-        serializer_class.Meta.read_only_fields = serializer_class.Meta.fields
+#        serializer_class.Meta.read_only_fields = ('id','user')
+        serializer_class.Meta.read_only_fields = fields
         return serializer_class(*args, **kwargs)
 
 
@@ -580,7 +582,7 @@ class PlayerChallengeFilter(RoleFilter):
 #        import ipdb; ipdb.set_trace()
         # list create retrieve update partial_update destroy
         #FIXME Action is evaulating to None instead of 'solve' 
-        return ['list', 'retrieve', 'update', 'solve',None]
+        return ['list', 'retrieve', 'update', 'solve']
 
     def get_queryset(self, request, view, queryset):
 #        import ipdb; ipdb.set_trace()
@@ -627,8 +629,11 @@ class NewChallengeViewSet(BaseRoleFilterModelViewSet):
     role_filter_classes = [PlayerChallengeFilter, AdminRoleFilter, StaffRoleFilter]
     base_name = 'challenge'
 
-    @action(detail=True, methods=['post'], permission_classes=[IsPlayer], name='solve')
+    @action(detail=True, methods=['get','post'], permission_classes=[IsPlayer])
     def solve(self, request, pk):
+        if request.method == "GET" or not request.data.get('answer'):
+            response = {'message':"Please POST answer"}
+            return Response(response)
         response = {'alert':None}
         challenge = Challenge.objects.get(pk=pk)
         game = challenge.game
@@ -647,9 +652,11 @@ class NewChallengeViewSet(BaseRoleFilterModelViewSet):
         if penalties:
             response['alert'] = 'red'
             cooldown_ends = penalties.first().created+cooldown
-            cooldown_ends_str = cooldown_ends.strftime("%H:%M:%S")
-            description = f"Red alert ends at {cooldown_ends_str}"
+            time_remaining = timezone.now()-cooldown_ends
+            time_remaining = abs(time_remaining.total_seconds())
+            description = f"Red alert ends in {time_remaining} seconds"
             response['description'] = description
+            response['time'] = abs(time_remaining)
             return Response(response)
         player_answer_text = request.data.get('answer')
 
@@ -682,12 +689,14 @@ class NewChallengeViewSet(BaseRoleFilterModelViewSet):
 
             if yellow_penalties:
                 tag_type = PenaltyTag.Type.red.value
-                cooldown_ends = datetime.now()+cooldown
-                cooldown_ends_str = cooldown_ends.strftime("%H:%M:%S")
-                description = f"Red alert ends at {cooldown_ends_str}"
+                #cooldown_ends = datetime.now()+cooldown
+                #cooldown_ends_str = cooldown_ends.strftime("%H:%M:%S")
+                cooldown = abs(cooldown.total_seconds())
+                description = f"Red alert ends in {cooldown} seconds"
                 penalty_tag =  PenaltyTag.objects.create(instance=penalty, name=tag_type)
                 response['alert'] = 'red'
                 response['description'] = description
+                response['time'] = cooldown
             elif general_penalties:
 #                penalty = Penalty.objects.create(player=player, game=game)
                 tag_type = PenaltyTag.Type.yellow.value

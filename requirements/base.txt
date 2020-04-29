@@ -1,7 +1,6 @@
-django-filter
-markdown
+#django-filter
+#markdown
 djangorestframework
-psycopg2
 social-auth-app-django
 whitenoise
 PyYAML
@@ -14,3 +13,4 @@ django-storages
 boto3
 django-guardian
 djangorestframework-role-filters
+django_filter

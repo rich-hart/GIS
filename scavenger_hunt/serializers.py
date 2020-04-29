@@ -56,6 +56,23 @@ class NewChallengeSerializer(serializers.ModelSerializer):
         challenge = Challenge.objects.create(problem=question,solution=answer,game=game)
         return challenge
 
+    def update(self, validated_data):
+#        import ipdb; ipdb.set_trace()
+        a_serializer=AnswerSerializer(data=validated_data['solution']['answer']) 
+        a_serializer.is_valid()
+        answer = a_serializer.save()
+        q_serializer=QuestionSerializer(data=validated_data['problem']['question']) 
+        q_serializer.is_valid()
+        question = q_serializer.save()
+        game = validated_data['game']
+        challenge = Challenge.objects.get(validated_data['id'])
+        challenge.problem=question
+        challenge.solution=answer
+        challenge.game=game
+        challenge.save()
+        return challenge
+
+
     class Meta:
         model = Challenge
         fields = ('id','problem','solution','game')
@@ -81,6 +98,22 @@ class ChallengeSerializer(serializers.ModelSerializer):
         game = validated_data['game']
         challenge = Challenge.objects.create(problem=question,solution=answer,game=game)
         return challenge
+
+    def update(self, challenge, validated_data):
+#        import ipdb; ipdb.set_trace()
+        a_serializer=AnswerSerializer(data=validated_data['solution']['answer']) 
+        a_serializer.is_valid()
+        answer = a_serializer.save()
+        q_serializer=QuestionSerializer(data=validated_data['problem']['question']) 
+        q_serializer.is_valid()
+        question = q_serializer.save()
+        game = validated_data['game']
+        challenge.problem=question
+        challenge.solution=answer
+        challenge.game=game
+        challenge.save()
+        return challenge
+
 
     class Meta:
         model = Challenge

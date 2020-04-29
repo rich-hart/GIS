@@ -1,0 +1,294 @@
+<!-- LCARS SDK 16323.311
+- This file is a part of the LCARS SDK.
+- https://github.com/AricwithanA/LCARS-SDK/blob/master/LICENSE.md
+- For more information please go to http://www.lcarssdk.org.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    
+    <title>Color Pattern Generator | LCARS SDK</title>
+ 
+    <!--<base href="/">-->
+    <script type="text/javascript" src="/static/lcarssdk/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/js/webviewinfo.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/js/arrive.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/js/lcarssdk.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/addons/scrollbutton/scrollbutton.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/addons/levelbar/levelbar.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/templates/bracket/bracket.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/templates/dialog/dialog.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/templates/framing/framing.js"></script>
+    <script type="text/javascript" src="/static/lcarssdk/templates/button/button.js"></script>
+    
+    <script type="text/javascript" src="/static/interface/module.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/css/lcarssdk.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/addons/scrollbutton/scrollbutton.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/addons/levelbar/levelbar.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/templates/bracket/bracket.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/templates/dialog/dialog.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/templates/framing/framing.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/templates/button/button.css">
+    <link rel="stylesheet" type="text/css" href="/static/lcarssdk/themes/theme_ussNotAffiliated.css">
+    
+    <link rel="stylesheet" type="text/css" href="/static/interface/module.css"></head>
+
+
+    
+</head>
+
+<div style="display:none">
+    <div id='challenge_list'>
+        {% for challenge in challenges %} 
+           <div class="row header flexh" id="row_333">
+              <div class="cap medium left bg-" id="cap_334"></div>
+              <div id="title_335" class="title half">CHALLENGE {{challenge.id}}</div>
+              <div class="bar flexch bg-" id="bar_336"></div>
+              <div class="cap medium right bg-" id="cap_337"></div>
+           </div>
+           {% if challenge.problem.question.video %}
+           <video width="320" height="240" class="center" controls>
+             <source src="{{challenge.problem.question.video}}" type="video/mp4">
+           </video>
+           {% endif %}
+           {% if challenge.problem.question.picture %}
+           <img src="{{challenge.problem.question.picture}}">
+           {% endif %}
+           <div class="content flexcv" id="content_338">
+              <p id="htmlTag_345" class="htmlTag text-blue-2" style="text-align: center">
+                  {{challenge.problem.question.text}}
+              </p>
+           </div>
+           <div class="row footer flexh" id="row_339">
+              <div class="cap medium left bg-" id="cap_340"></div>
+              <div class="bar flexch bg-" id="bar_341"></div>
+              <div id="title_342" class="title half bg-">{{challenge.answer}}</div>
+              <div class="cap medium right bg-" id="cap_343"></div>
+           </div>
+           </br>
+        {% endfor %}
+    </div>
+
+</div>
+
+<body ontouchstart="" onload="main()" id='body'>
+
+
+
+
+</body>
+
+
+
+
+<script>
+
+  function red_alert() {
+    var view_port = document.getElementById("wpr_viewport");
+    if (view_port.classList.contains('red-alert')) {
+      view_port.classList.remove('red-alert');
+    } else {
+      view_port.classList.add('red-alert');  
+    }
+  }
+
+</script>
+
+<script src="/static/particles/particles.js">
+
+
+</script>
+<script>
+var particle_config =  {
+    "particles": {
+      "number": {
+        "value": 100,
+        "density": {
+          "enable": true,
+          "value_area": 100
+        }
+      },
+      "color": {
+        "value": "#ffffff"
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        },
+        "polygon": {
+          "nb_sides": 5
+        },
+        "image": {
+          "src": "img/github.svg",
+          "width": 100,
+          "height": 100
+        }
+      },
+      "opacity": {
+        "value": 0.5,
+        "random": false,
+        "anim": {
+          "enable": false,
+          "speed": 1,
+          "opacity_min": 0.1,
+          "sync": false
+        }
+      },
+      "size": {
+        "value": 5,
+        "random": true,
+        "anim": {
+          "enable": false,
+          "speed": 40,
+          "size_min": 0.1,
+          "sync": false
+        }
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#ffffff",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 2,
+        "direction": "none",
+        "random": false,
+        "straight": false,
+        "out_mode": "out",
+        "attract": {
+          "enable": false,
+          "rotateX": 600,
+          "rotateY": 1200
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "repulse"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "push"
+        },
+        "resize": true
+      },
+      "modes": {
+        "grab": {
+          "distance": 400,
+          "line_linked": {
+            "opacity": 1
+          }
+        },
+        "bubble": {
+          "distance": 400,
+          "size": 40,
+          "duration": 2,
+          "opacity": 8,
+          "speed": 3
+        },
+        "repulse": {
+          "distance": 200
+        },
+        "push": {
+          "particles_nb": 4
+        },
+        "remove": {
+          "particles_nb": 2
+        }
+      }
+    },
+    "retina_detect": true,
+    "config_demo": {
+      "hide_card": false,
+      "background_color": "#b61924",
+      "background_image": "",
+      "background_position": "50% 50%",
+      "background_repeat": "no-repeat",
+      "background_size": "cover"
+    }
+  };
+
+function main(){
+  var login = document.getElementById("login");
+
+  var logout = document.getElementById("logout");
+  var delta = document.createElement("img");
+  var profile_pic = document.getElementById('profile_pic');
+  delta.setAttribute('src', '/static/main/delta.png');
+  delta.setAttribute('id', 'delta');
+
+{% if username %}
+logout.setAttribute('href',"/api-auth/logout/?next={{ request.path }}#profile")
+login.children[1].textContent = "{{username}}"
+login.classList.remove('blink')
+challenge_card = document.getElementById('challenge_list')
+main_view = document.getElementById('wpr_mainView')
+view_port = document.getElementById('wpr_viewport')
+//view_port.removeChild(main_view)
+//view_port.appendChild(challenge_card)
+row_69 = document.getElementById('row_69')
+wrapper_91 = document.getElementById('wrapper_91')
+main_view.removeChild(row_69)
+main_view.removeChild(wrapper_91)
+main_view.appendChild(challenge_card)
+challenge_card.style.display = "block";
+{% else %}
+
+  login.setAttribute('href',"{% url 'social:begin' 'facebook' %}")
+  logout.parentElement.remove(logout)
+{% endif %}
+//  red_alert();
+  particlesJS('profile_pic',particle_config);
+//  profile_pic.insertBefore(delta,profile_pic.childNodes[0]);
+  profile_pic.appendChild(delta);
+//pJSDom[0].pJS.particles.color.value ="#00cc99"
+//pJSDom[0].pJS.particles.color.rgb= hexToRgb(pJSDom[0].pJS.particles.color.value)
+  pJSDom[0].pJS.particles.line_linked.color="#00cc99"
+  pJSDom[0].pJS.particles.line_linked.color_rgb_line =hexToRgb(pJSDom[0].pJS.particles.line_linked.color)
+
+};
+</script>
+
+<style type="text/css">
+#delta {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+  display: inline-block;
+  background-color: transparent;
+    max-width: 100%;
+    max-height: 100%;
+/*background-color: transparent;
+background: transparent;*/
+}
+.particles-js-canvas-el {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 0;
+/*
+background-color: transparent;
+background: transparent;
+*/
+    max-width: 100%;
+    max-height: 100%;
+}
+
+</style>
+
+</html>
+

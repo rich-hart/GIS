@@ -23,6 +23,7 @@ from .views import (
     qr_code_validator,
     raffle,
     lcars,
+    scavenger_hunt,
 )
 
 from django.conf.urls import url, include
@@ -106,14 +107,14 @@ urlpatterns = [
     url(r'^qr_code_validator/(?P<key>.+)/$',qr_code_validator),
     url(r'^raffle/',raffle),
     url(r'^lcars/', lcars),
-
+    url(r'^scavenger_hunt/', scavenger_hunt),
 ]
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-#if settings.DEBUG:
-#    urlpatterns = urlpatterns + static('/lcarssdk/', document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static('/lcarssdk/', document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + [url(r'^demo/',demo)]

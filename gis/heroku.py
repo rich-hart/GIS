@@ -1,6 +1,9 @@
-from .settings import *
 import os
 import dj_database_url
+import django_heroku
+
+from .settings import *
+
 DEBUG = False
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
@@ -10,4 +13,5 @@ SOCIAL_AUTH_FACEBOOK_KEY = os.environ['SOCIAL_AUTH_FACEBOOK_KEY']
 GOOGLE_MAPS_API_KEY = os.environ['GOOGLE_MAPS_API_KEY']
 
 
+django_heroku.settings(locals())
 

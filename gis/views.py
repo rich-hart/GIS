@@ -5,6 +5,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import redirect
 from accounts.models import Profile #,Address
 from django.conf import settings
+from scavenger_hunt.views import NewChallengeViewSet
+
+
+def scavenger_hunt(request):
+    return render(request, 'scavenger_hunt.html')
 
 
 def raffle(request):
@@ -75,6 +80,8 @@ def profile_form(request):
     return redirect('/#profile')
 
 def lcars(request):
+#    import ipdb; ipdb.set_trace()
+
     data = {
       'username': None,
       'address': None,
@@ -94,5 +101,10 @@ def lcars(request):
         data['username'] = user.username
     else:
         data['username'] = user.username
-    return render(request, 'LCARS-SDK_16323.311/interfaces/color-generator/index.html',data)
+
+    view = NewChallengeViewSet.as_view({'get': 'list'})
+    response = view(request)
+    if response.status_code == 200:
+        data['challenges'] = response.data['results']
+    return render(request, 'index.html',data)
 

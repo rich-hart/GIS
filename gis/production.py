@@ -1,0 +1,27 @@
+from .settings import *
+import os
+
+DEBUG = os.environ.get('GIS_DEBUG',False)
+#AWS_ACCESS_KEY_ID = os.environ.get('THECINEMASOURCE_AWS_ACCESS_KEY_ID')
+#AWS_SECRET_ACCESS_KEY = os.environ.get('THECINEMASOURCE_AWS_SECRET_ACCESS_KEY')
+#AWS_STORAGE_BUCKET_NAME = os.environ.get('THECINEMASOURCE_AWS_STORAGE_BUCKET_NAME')
+
+AWS_ACCESS_KEY_ID = 'AKIAJVF2E5ADHUQADSWQ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'thecinemasource-assets'
+
+AWS_REGION = 'us-east-2'
+AWS_S3_CUSTOM_DOMAIN = 's3.%s.amazonaws.com/%s' % (AWS_REGION, AWS_STORAGE_BUCKET_NAME)
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_STATIC_LOCATION = 'static'
+STATICFILES_STORAGE = 'gis.storage_backends.StaticStorage'
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+
+AWS_MEDIA_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'gis.storage_backends.MediaStorage'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
+
+

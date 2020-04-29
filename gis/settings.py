@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,6 +33,7 @@ ALLOWED_HOSTS = [
 'gaaaysinspaaace.herokuapp.com',
 'www.thegreattribblehunt.org',
 '172.17.177.11',
+'localhost',
 ]
 
 
@@ -251,7 +251,6 @@ try:
 except ImportError:
     pass
 
-django_heroku.settings(locals())
 
 
 

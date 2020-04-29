@@ -44,33 +44,41 @@
 
 <div style="display:none">
     <div id='challenge_list'>
-        {% for challenge in challenges %} 
-           <div class="row header flexh" id="row_333">
-              <div class="cap medium left bg-" id="cap_334"></div>
-              <div id="title_335" class="title half">CHALLENGE {{challenge.id}}</div>
-              <div class="bar flexch bg-" id="bar_336"></div>
-              <div class="cap medium right bg-" id="cap_337"></div>
-           </div>
-           {% if challenge.problem.question.video %}
-           <video width="320" height="240" class="center" controls>
-             <source src="{{challenge.problem.question.video}}" type="video/mp4">
-           </video>
-           {% endif %}
-           {% if challenge.problem.question.picture %}
-           <img src="{{challenge.problem.question.picture}}">
-           {% endif %}
-           <div class="content flexcv" id="content_338">
-              <p id="htmlTag_345" class="htmlTag text-blue-2" style="text-align: center">
-                  {{challenge.problem.question.text}}
-              </p>
-           </div>
-           <div class="row footer flexh" id="row_339">
-              <div class="cap medium left bg-" id="cap_340"></div>
-              <div class="bar flexch bg-" id="bar_341"></div>
-              <div id="title_342" class="title half bg-">{{challenge.answer}}</div>
-              <div class="cap medium right bg-" id="cap_343"></div>
-           </div>
-           </br>
+        {% for challenge in challenges %}
+           <form action="{% url 'challenge-detail' pk=challenge.id %}solve/?next=/lcars/&format=json" method="POST">
+               {% csrf_token %}
+               <div class="row header flexh" id="row_333">
+                  <div class="cap medium left bg-" id="cap_334"></div>
+                  <div id="title_335" class="title half">CHALLENGE {{challenge.id}}</div>
+                  <div class="bar flexch bg-" id="bar_336"></div>
+                  <div class="cap medium right bg-" id="cap_337"></div>
+               </div>
+               {% if challenge.problem.question.video %}
+               <video width="320" height="240" class="center" controls>
+                 <source src="{{challenge.problem.question.video}}" type="video/mp4">
+               </video>
+               {% endif %}
+               {% if challenge.problem.question.picture %}
+               <img src="{{challenge.problem.question.picture}}">
+               {% endif %}
+               <div class="content flexcv" id="content_338">
+                  <p id="htmlTag_345" class="htmlTag text-blue-2" style="text-align: center">
+                      {{challenge.problem.question.text}}
+                  </p>
+               </div>
+               <input type="text" name="answer" placeholder="{{challenge.answer}}">
+               <div class="row footer flexh" id="row_339">
+                  <div class="cap medium left bg-" id="cap_340"></div>
+                  <div class="bar flexch bg-" id="bar_341"></div>
+<button type="submit" class="btn btn-primary js-tooltip">
+                  <div id="title_342" class="title half bg-">
+                      <div type="submit" class="button bg-red-4">SUBMIT</div>
+                  </div>
+</button>
+                  <div class="cap medium right bg-" id="cap_343"></div>
+               </div>
+               </br>
+            </form>
         {% endfor %}
     </div>
 

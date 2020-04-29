@@ -125,7 +125,7 @@ class ChallengeSerializer(serializers.ModelSerializer):
 class HiddenChallengeSerializer(serializers.ModelSerializer):
 #    solution = SolutionSerializer()
     problem = ProblemSerializer(read_only=True)
-    answer = serializers.CharField(default='ANSWER_HERE',allow_blank=False, trim_whitespace=True)
+    answer = serializers.CharField(default='Enter Access Code',allow_blank=False, trim_whitespace=True)
 
     class Meta:
         model = Challenge
@@ -172,7 +172,7 @@ class AchievementSerializer(serializers.ModelSerializer):
 
 class DemoSerializer(serializers.ModelSerializer):
     problem = ProblemSerializer()
-    answer = serializers.HiddenField(default = 'ANSWER HERE')
+    answer = serializers.HiddenField(default = 'Enter Access Code')
 
     class Meta:
         model = Challenge

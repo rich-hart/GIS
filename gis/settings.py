@@ -245,12 +245,33 @@ STATICFILES_DIRS = [
 #    os.path.join(BASE_DIR, "static","lcarssdk"),
 ]
 
+AWS_ACCESS_KEY_ID = 'AKIAJVF2E5ADHUQADSWQ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'thecinemasource-assets'
+
+AWS_REGION = 'us-east-2'
+AWS_S3_CUSTOM_DOMAIN = 's3.%s.amazonaws.com/%s' % (AWS_REGION, AWS_STORAGE_BUCKET_NAME)
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_STATIC_LOCATION = 'static'
+AWS_MEDIA_LOCATION = 'media'
+
+
+
 
 try:
     from .local import *
 except ImportError:
     pass
 
+if not DEBUG:
+    STATICFILES_STORAGE = 'gis.storage_backends.StaticStorage'
+    STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+
+DEFAULT_FILE_STORAGE = 'gis.storage_backends.MediaStorage'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
 
 
 

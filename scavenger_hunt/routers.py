@@ -6,6 +6,13 @@ from .views import *
 router = routers.DefaultRouter()
 
 router.register(
+    r'avatar',
+    NewAvatarViewSet,
+    basename='avatar'
+)
+
+
+router.register(
     r'players',
     NewPlayerViewSet,
     basename='player'

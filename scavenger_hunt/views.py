@@ -1,6 +1,7 @@
 import re
 from datetime import timedelta, datetime
 #import django_filters.rest_framework
+from django.contrib.auth.models import AnonymousUser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer, JSONRenderer
 from django.utils import timezone
@@ -66,6 +67,25 @@ class PlayerRoleFilter(RoleFilter):
 #        serializer_class.Meta.read_only_fields = ('id','user')
         serializer_class.Meta.read_only_fields = fields
         return serializer_class(*args, **kwargs)
+class NewAvatarViewSet(viewsets.ModelViewSet):
+    serializer_class = AvatarSerializer
+#    permission_classes = [IsAuthenticated]
+    base_name = 'avatar'
+
+    def perform_create(self, serializer):
+        pass
+
+    def perform_update(self, serializer):
+        pass
+
+    def perform_destroy(self, serializer):
+        pass
+
+    def get_queryset(self):
+        user = self.request.user
+        if isinstance(user,AnonymousUser):
+            return []
+        return Player.objects.filter(user=user)
 
 
 class AvatarViewSet(viewsets.ModelViewSet):

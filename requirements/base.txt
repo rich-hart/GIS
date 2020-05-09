@@ -14,3 +14,5 @@ boto3
 django-guardian
 djangorestframework-role-filters
 django_filter
+corsheaders
+django-cors-headers

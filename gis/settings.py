@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django_filters',
 #    'address',
     'guardian',
+    'corsheaders',
     # PROJECT_APPS
     'base',
     'accounts',
@@ -65,6 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -162,7 +164,7 @@ SOCIAL_AUTH_PIPELINE = (
     'scavenger_hunt.pipeline.create_player',
 )
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#profile'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://localhost:8000/#'
 
 ROOT_URLCONF = 'gis.urls'
 
@@ -273,8 +275,15 @@ if not DEBUG:
 DEFAULT_FILE_STORAGE = 'gis.storage_backends.MediaStorage'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
 
+CORS_ORIGIN_ALLOW_ALL = True #FIXME: change in production
 
-
-
-
-
+#CORS_ORIGIN_WHITELIST = [
+#    "https://example.com",
+#    "https://sub.example.com",
+#    "http://localhost:8080",
+#    "http://127.0.0.1:8000",
+#    "http://localhost:8000",
+#    "http://127.0.0.1:8001",
+#    "http://localhost:8001",
+#
+#]

@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'django_filters',
 #    'address',
     'guardian',
-    'corsheaders',
+#    'corsheaders',
     # PROJECT_APPS
     'base',
     'accounts',
@@ -66,7 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+#    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -165,6 +165,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://localhost:8000/#'
+LOGOUT_REDIRECT_URL = 'http://localhost:8000/#'
 
 ROOT_URLCONF = 'gis.urls'
 
@@ -275,7 +276,7 @@ if not DEBUG:
 DEFAULT_FILE_STORAGE = 'gis.storage_backends.MediaStorage'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_MEDIA_LOCATION)
 
-CORS_ORIGIN_ALLOW_ALL = True #FIXME: change in production
+#CORS_ORIGIN_ALLOW_ALL = True #FIXME: change in production
 
 #CORS_ORIGIN_WHITELIST = [
 #    "https://example.com",

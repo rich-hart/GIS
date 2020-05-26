@@ -185,7 +185,7 @@ class PlayerSerializer(serializers.ModelSerializer):
 #    game_set = GameSerializer(many=True, read_only=True)
     class Meta:
         model = Player
-        fields = ('id','user')
+        fields = ('id','user','game_set')
 
 class RewardSerializer(serializers.ModelSerializer):
     class Meta:
